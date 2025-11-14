@@ -25,6 +25,11 @@ export default {
           light: '#6dd88f',
           dark: '#3ea860',
         },
+        'teal-brown': {
+          DEFAULT: '#5f8a7f',
+          light: '#7a9d93',
+          dark: '#4a6b62',
+        },
         'deep-gold': {
           DEFAULT: '#D4AF37',
           light: '#e8c965',
@@ -34,6 +39,11 @@ export default {
           DEFAULT: '#FFD700',
           light: '#ffe94d',
           dark: '#ccac00',
+        },
+        'accent-pink': {
+          DEFAULT: '#e8b4b8',
+          light: '#f5d0d3',
+          dark: '#d89a9f',
         },
       },
       backgroundImage: {

@@ -6,7 +6,7 @@ export default function Landing() {
       {/* Hero Section with Cream Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         {/* Cream Content Area with Rounded Corners */}
-        <div className="bg-cream rounded-3xl shadow-2xl overflow-hidden">
+        <div className="bg-cream rounded-3xl overflow-hidden">
           {/* Header Navigation */}
           <nav className="px-6 lg:px-12 py-6 border-b border-cream-dark/20">
             <div className="flex justify-between items-center">
@@ -105,6 +105,99 @@ export default function Landing() {
           </div>
         </div>
       </div>
+
+      {/* How It Works Section */}
+      <section className="py-24 bg-cream">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl sm:text-6xl font-bold text-black mb-4">
+              How It Works
+            </h2>
+            <p className="text-xl text-black/70 max-w-2xl mx-auto">
+              Three simple steps to collect all your event photos
+            </p>
+          </div>
+
+          {/* Step 1: Create Event */}
+          <div className="mb-32">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="order-2 lg:order-1">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    alt="Creating event on PhotoLog"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="order-1 lg:order-2 flex flex-col justify-center">
+                <div className="inline-flex items-center space-x-3 mb-6">
+                  <span className="text-6xl font-bold text-deep-green">01</span>
+                  <div className="h-px w-16 bg-deep-green"></div>
+                </div>
+                <h3 className="text-4xl sm:text-5xl font-bold text-black mb-6">
+                  Create Your Event
+                </h3>
+                <p className="text-xl text-black/70 leading-relaxed mb-8">
+                  Sign up and create your event in under a minute. Add event details, set a password if needed, and customize your gallery.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2: Share QR Code */}
+          <div className="mb-32">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="flex flex-col justify-center">
+                <div className="inline-flex items-center space-x-3 mb-6">
+                  <span className="text-6xl font-bold text-deep-green">02</span>
+                  <div className="h-px w-16 bg-deep-green"></div>
+                </div>
+                <h3 className="text-4xl sm:text-5xl font-bold text-black mb-6">
+                  Share Your QR Code
+                </h3>
+                <p className="text-xl text-black/70 leading-relaxed mb-8">
+                  Get your unique QR code and shareable link instantly. Display it at your venue or share digitally with your guests.
+                </p>
+              </div>
+              <div className="aspect-[4/3] overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                  alt="QR code display at event"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Step 3: Collect Photos */}
+          <div>
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="order-2 lg:order-1">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    alt="Guests uploading photos"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="order-1 lg:order-2 flex flex-col justify-center">
+                <div className="inline-flex items-center space-x-3 mb-6">
+                  <span className="text-6xl font-bold text-deep-green">03</span>
+                  <div className="h-px w-16 bg-deep-green"></div>
+                </div>
+                <h3 className="text-4xl sm:text-5xl font-bold text-black mb-6">
+                  Collect Photos Instantly
+                </h3>
+                <p className="text-xl text-black/70 leading-relaxed mb-8">
+                  Guests scan and upload photos instantly from their phones. You moderate, download, and keep all the memories in one place.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
