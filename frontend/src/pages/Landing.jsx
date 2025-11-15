@@ -400,43 +400,43 @@ export default function Landing() {
       </section>
 
       {/* Social Proof & Stats Section */}
-      <section className="py-32 bg-gradient-to-br from-cream via-cream-light to-cream overflow-hidden relative">
+      <section className="py-12 sm:py-16 lg:py-32 bg-gradient-to-br from-cream via-cream-light to-cream overflow-hidden relative">
         {/* Background decorative element */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-deep-green/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+        <div className="absolute top-0 right-0 w-48 sm:w-64 lg:w-96 h-48 sm:h-64 lg:h-96 bg-deep-green/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-48 sm:w-64 lg:w-96 h-48 sm:h-64 lg:h-96 bg-emerald/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-24">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-12 mb-12 sm:mb-16 lg:mb-24">
             <div className="text-center lg:text-left">
-              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold text-deep-green mb-3">
+              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-deep-green mb-2 sm:mb-3">
                 10K+
               </div>
-              <div className="text-lg text-black/70 font-medium">
+              <div className="text-sm sm:text-base lg:text-lg text-black/70 font-medium">
                 Events Created
               </div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold text-deep-green mb-3">
+              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-deep-green mb-2 sm:mb-3">
                 500K+
               </div>
-              <div className="text-lg text-black/70 font-medium">
+              <div className="text-sm sm:text-base lg:text-lg text-black/70 font-medium">
                 Photos Shared
               </div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold text-deep-green mb-3">
+              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-deep-green mb-2 sm:mb-3">
                 50K+
               </div>
-              <div className="text-lg text-black/70 font-medium">
+              <div className="text-sm sm:text-base lg:text-lg text-black/70 font-medium">
                 Happy Hosts
               </div>
             </div>
             <div className="text-center lg:text-left">
-              <div className="text-5xl sm:text-6xl lg:text-7xl font-bold text-deep-green mb-3">
+              <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-deep-green mb-2 sm:mb-3">
                 99%
               </div>
-              <div className="text-lg text-black/70 font-medium">
+              <div className="text-sm sm:text-base lg:text-lg text-black/70 font-medium">
                 Satisfaction Rate
               </div>
             </div>
@@ -444,31 +444,31 @@ export default function Landing() {
 
           {/* Testimonials - Overlapping Cards Style */}
           <div className="relative">
-            <div className="text-center mb-16">
-              <h2 className="text-5xl sm:text-6xl font-bold text-black mb-4">
+            <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-3 sm:mb-4">
                 Loved by Event Hosts
               </h2>
-              <p className="text-xl text-black/70 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg lg:text-xl text-black/70 max-w-2xl mx-auto px-4">
                 See what people are saying about PhotoLog
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
               {/* Testimonial 1 */}
-              <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl border border-black/5 transform lg:-rotate-2 hover:rotate-0 transition-transform duration-300">
+              <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-black/5 transform lg:-rotate-2 hover:rotate-0 transition-transform duration-300">
                 <div className="mb-6">
-                  <div className="flex space-x-1 mb-4">
+                  <div className="flex space-x-1 mb-3 sm:mb-4">
                     {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
+                      <svg key={i} className="w-4 h-4 sm:w-5 sm:h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     ))}
                   </div>
-                  <p className="text-lg text-black/80 leading-relaxed mb-6">
+                  <p className="text-base sm:text-lg text-black/80 leading-relaxed mb-4 sm:mb-6">
                     "PhotoLog made our wedding photo collection effortless. Guests loved how easy it was to upload, and we got so many amazing moments we would have missed otherwise."
                   </p>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-deep-green to-emerald overflow-hidden">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-deep-green to-emerald overflow-hidden flex-shrink-0">
                       <img
                         src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
                         alt="Sarah"
@@ -476,28 +476,28 @@ export default function Landing() {
                       />
                     </div>
                     <div>
-                      <div className="font-bold text-black">Sarah Chen</div>
-                      <div className="text-sm text-black/60">Wedding Host</div>
+                      <div className="font-bold text-sm sm:text-base text-black">Sarah Chen</div>
+                      <div className="text-xs sm:text-sm text-black/60">Wedding Host</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 2 - Offset slightly */}
-              <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl border border-black/5 transform lg:rotate-1 lg:translate-y-8 hover:rotate-0 hover:translate-y-0 transition-transform duration-300">
+              <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-black/5 transform lg:rotate-1 lg:translate-y-8 hover:rotate-0 hover:translate-y-0 transition-transform duration-300">
                 <div className="mb-6">
-                  <div className="flex space-x-1 mb-4">
+                  <div className="flex space-x-1 mb-3 sm:mb-4">
                     {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
+                      <svg key={i} className="w-4 h-4 sm:w-5 sm:h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     ))}
                   </div>
-                  <p className="text-lg text-black/80 leading-relaxed mb-6">
+                  <p className="text-base sm:text-lg text-black/80 leading-relaxed mb-4 sm:mb-6">
                     "As an event planner, PhotoLog saves me hours. No more chasing guests for photos or dealing with messy file sharing. It's professional, elegant, and just works."
                   </p>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-brown to-deep-green overflow-hidden">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-teal-brown to-deep-green overflow-hidden flex-shrink-0">
                       <img
                         src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
                         alt="Marcus"
@@ -505,28 +505,28 @@ export default function Landing() {
                       />
                     </div>
                     <div>
-                      <div className="font-bold text-black">Marcus Johnson</div>
-                      <div className="text-sm text-black/60">Event Planner</div>
+                      <div className="font-bold text-sm sm:text-base text-black">Marcus Johnson</div>
+                      <div className="text-xs sm:text-sm text-black/60">Event Planner</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 3 */}
-              <div className="bg-white/80 backdrop-blur-sm p-8 rounded-3xl border border-black/5 transform lg:-rotate-1 lg:translate-y-4 hover:rotate-0 hover:translate-y-0 transition-transform duration-300">
+              <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-black/5 transform lg:-rotate-1 lg:translate-y-4 hover:rotate-0 hover:translate-y-0 transition-transform duration-300 sm:col-span-2 lg:col-span-1">
                 <div className="mb-6">
-                  <div className="flex space-x-1 mb-4">
+                  <div className="flex space-x-1 mb-3 sm:mb-4">
                     {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-5 h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
+                      <svg key={i} className="w-4 h-4 sm:w-5 sm:h-5 text-gold" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     ))}
                   </div>
-                  <p className="text-lg text-black/80 leading-relaxed mb-6">
+                  <p className="text-base sm:text-lg text-black/80 leading-relaxed mb-4 sm:mb-6">
                     "The QR code feature is brilliant. At our tech conference, attendees scanned and shared photos instantly. We had a complete gallery within hours of the event ending."
                   </p>
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald to-deep-green overflow-hidden">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-emerald to-deep-green overflow-hidden flex-shrink-0">
                       <img
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
                         alt="David"
@@ -534,8 +534,8 @@ export default function Landing() {
                       />
                     </div>
                     <div>
-                      <div className="font-bold text-black">David Park</div>
-                      <div className="text-sm text-black/60">Conference Organizer</div>
+                      <div className="font-bold text-sm sm:text-base text-black">David Park</div>
+                      <div className="text-xs sm:text-sm text-black/60">Conference Organizer</div>
                     </div>
                   </div>
                 </div>
