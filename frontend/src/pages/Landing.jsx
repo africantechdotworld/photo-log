@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { CheckIcon } from '@heroicons/react/24/outline';
 
 export default function Landing() {
   return (
@@ -573,36 +574,28 @@ export default function Landing() {
 
               <div className="mb-8 space-y-4 sm:space-y-6 sm:mb-10">
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">5 Events</div>
                     <div className="text-xs sm:text-sm text-black/60">per month</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">1,000 Photos</div>
                     <div className="text-xs sm:text-sm text-black/60">total storage</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">10 GB Storage</div>
                     <div className="text-xs sm:text-sm text-black/60">per event</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">All Core Features</div>
                     <div className="text-xs sm:text-sm text-black/60">QR codes, moderation, download</div>
@@ -639,45 +632,35 @@ export default function Landing() {
 
               <div className="mb-8 space-y-4 sm:space-y-6 sm:mb-10">
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-white sm:text-base">20 Events</div>
                     <div className="text-xs sm:text-sm text-white/80">per month</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-white sm:text-base">10,000 Photos</div>
                     <div className="text-xs sm:text-sm text-white/80">total storage</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-white sm:text-base">50 GB Storage</div>
                     <div className="text-xs sm:text-sm text-white/80">per event</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-white sm:text-base">Priority Support</div>
                     <div className="text-xs sm:text-sm text-white/80">faster response times</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gold flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-white sm:text-base">Advanced Analytics</div>
                     <div className="text-xs sm:text-sm text-white/80">insights and reports</div>
@@ -708,54 +691,42 @@ export default function Landing() {
 
               <div className="mb-8 space-y-4 sm:space-y-6 sm:mb-10">
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">Unlimited Events</div>
                     <div className="text-xs sm:text-sm text-black/60">create as many as you need</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">Unlimited Photos</div>
                     <div className="text-xs sm:text-sm text-black/60">no storage limits</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">500 GB Storage</div>
                     <div className="text-xs sm:text-sm text-black/60">per event</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">Dedicated Support</div>
                     <div className="text-xs sm:text-sm text-black/60">24/7 account manager</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">Custom Branding</div>
                     <div className="text-xs sm:text-sm text-black/60">white-label options</div>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <CheckIcon className="w-5 h-5 sm:w-6 sm:h-6 text-deep-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="text-sm font-semibold text-black sm:text-base">API Access</div>
                     <div className="text-xs sm:text-sm text-black/60">integrate with your tools</div>
@@ -819,21 +790,15 @@ export default function Landing() {
 
           <div className="flex flex-wrap gap-8 justify-center items-center text-sm text-white/70">
             <div className="flex items-center space-x-2">
-              <svg className="w-5 h-5 text-emerald" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+              <CheckIcon className="w-5 h-5 text-emerald" />
               <span>No credit card required</span>
             </div>
             <div className="flex items-center space-x-2">
-              <svg className="w-5 h-5 text-emerald" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+              <CheckIcon className="w-5 h-5 text-emerald" />
               <span>Free to get started</span>
             </div>
             <div className="flex items-center space-x-2">
-              <svg className="w-5 h-5 text-emerald" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
+              <CheckIcon className="w-5 h-5 text-emerald" />
               <span>Set up in minutes</span>
             </div>
           </div>

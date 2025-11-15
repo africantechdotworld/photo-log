@@ -28,18 +28,18 @@ export default function Signin() {
         {/* Cream Content Area with Rounded Corners */}
         <div className="overflow-hidden rounded-2xl bg-cream sm:rounded-3xl">
           {/* Header Navigation */}
-          <nav className="px-4 py-4 border-b sm:px-6 lg:px-12 sm:py-6 border-cream-dark/20">
-            <div className="flex justify-between items-center">
-              <Link to="/" className="text-xl font-bold text-black sm:text-2xl">
+          <nav className="px-4 py-3 sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-b border-cream-dark/20">
+            <div className="flex justify-between items-center gap-2 sm:gap-4">
+              <Link to="/" className="text-lg sm:text-xl lg:text-2xl font-bold text-black flex-shrink-0">
                 PhotoLog
               </Link>
-              <div className="flex items-center space-x-2 sm:space-x-4">
-                <span className="text-sm sm:text-base text-black/60">
+              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                <span className="hidden sm:inline text-xs sm:text-sm lg:text-base text-black/60 whitespace-nowrap">
                   Don't have an account?
                 </span>
                 <Link
                   to="/signup"
-                  className="text-sm font-medium text-black transition-colors sm:text-base hover:text-deep-green"
+                  className="text-xs sm:text-sm lg:text-base font-medium text-black transition-colors hover:text-deep-green whitespace-nowrap px-2 sm:px-0"
                 >
                   Sign Up
                 </Link>
