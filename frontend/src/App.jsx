@@ -3,7 +3,7 @@ import Landing from './pages/Landing';
 import Signup from './pages/Signup';
 import Signin from './pages/Signin';
 import VerifyEmail from './pages/VerifyEmail';
-//import ForgotPassword from './pages/ForgotPassword';
+import ForgotPassword from './pages/ForgotPassword';
 //import CreateEvent from './pages/CreateEvent';
 //import EventDashboard from './pages/EventDashboard';
 //import HostGallery from './pages/HostGallery';
@@ -20,8 +20,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
-        {/*<Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/create-event" element={<CreateEvent />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/*<Route path="/create-event" element={<CreateEvent />} />
         <Route path="/dashboard" element={<EventDashboard />} />
         <Route path="/host/event/:id" element={<HostGallery />} />
         <Route path="/event/:id" element={<EventGallery />} />
