@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
+import { EnvelopeIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 
 export default function VerifyEmail() {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -105,39 +106,11 @@ export default function VerifyEmail() {
           </nav>
 
           {/* Main Content */}
-          <div className="grid gap-8 px-4 py-8 lg:grid-cols-2 sm:gap-12 lg:gap-16 sm:px-6 lg:px-12 sm:py-12 lg:py-16">
-            {/* Left Side - Image/Visual */}
-            <div className="hidden flex-col justify-center lg:flex">
-              <div className="relative">
-                <div className="aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-3xl">
-                  <img
-                    src="https://images.unsplash.com/photo-1596524430615-b46475ddff6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                    alt="Email verification"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t to-transparent rounded-2xl from-deep-green/80 via-deep-green/20 sm:rounded-3xl"></div>
-                {/* Text overlay */}
-                <div className="absolute right-0 bottom-0 left-0 p-6 sm:p-8 lg:p-10">
-                  <h2 className="mb-3 text-2xl font-bold text-white sm:text-3xl lg:text-4xl sm:mb-4">
-                    Verify Your Email
-                  </h2>
-                  <p className="text-base leading-relaxed sm:text-lg text-white/90">
-                    Check your inbox for a verification code to complete your account setup.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Side - Verification Form */}
-            <div className="flex flex-col justify-center">
-              <div className="mx-auto w-full max-w-md">
-                <div className="mb-6 sm:mb-8 text-center lg:text-left">
-                  <div className="inline-flex items-center justify-center lg:justify-start mb-4 w-16 h-16 rounded-full bg-emerald/10 text-emerald">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
+          <div className="flex flex-col justify-center px-4 py-8 sm:px-6 lg:px-12 sm:py-12 lg:py-16">
+            <div className="mx-auto w-full max-w-md">
+                <div className="mb-6 text-center sm:mb-8">
+                  <div className="inline-flex justify-center items-center mb-4 w-16 h-16 rounded-full bg-emerald/10 text-emerald">
+                    <EnvelopeIcon className="w-8 h-8" />
                   </div>
                   <h1 className="mb-3 text-3xl font-bold text-black sm:text-4xl lg:text-5xl sm:mb-4">
                     Check Your Email
@@ -153,10 +126,10 @@ export default function VerifyEmail() {
                 <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
                   {/* OTP Input Container */}
                   <div>
-                    <label className="block mb-4 text-sm font-medium text-black sm:text-base text-center lg:text-left">
+                    <label className="block mb-4 text-sm font-medium text-center text-black sm:text-base">
                       Enter Verification Code
                     </label>
-                    <div className="flex justify-center lg:justify-start gap-2 sm:gap-3">
+                    <div className="flex gap-2 justify-center sm:gap-3">
                       {otp.map((digit, index) => (
                         <input
                           key={index}
@@ -168,7 +141,7 @@ export default function VerifyEmail() {
                           onChange={(e) => handleChange(index, e.target.value)}
                           onKeyDown={(e) => handleKeyDown(index, e)}
                           onPaste={handlePaste}
-                          className="w-12 h-12 sm:w-14 sm:h-14 text-center text-xl sm:text-2xl font-bold text-black bg-white rounded-xl border-2 border-black/10 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-deep-green transition-all"
+                          className="w-12 h-12 text-xl font-bold text-center text-black bg-white rounded-xl border-2 transition-all sm:w-14 sm:h-14 sm:text-2xl border-black/10 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-deep-green"
                           aria-label={`Digit ${index + 1}`}
                         />
                       ))}
@@ -186,7 +159,7 @@ export default function VerifyEmail() {
                 </form>
 
                 {/* Resend Code */}
-                <div className="mt-6 sm:mt-8 text-center">
+                <div className="mt-6 text-center sm:mt-8">
                   <p className="mb-4 text-sm text-black/60 sm:text-base">
                     Didn't receive the code?
                   </p>
@@ -203,29 +176,15 @@ export default function VerifyEmail() {
                 </div>
 
                 {/* Help Text */}
-                <div className="mt-6 p-4 rounded-xl bg-emerald/5 border border-emerald/20">
+                <div className="p-4 mt-6 rounded-xl border bg-emerald/5 border-emerald/20">
                   <div className="flex items-start space-x-3">
-                    <svg className="flex-shrink-0 mt-0.5 w-5 h-5 text-emerald" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <InformationCircleIcon className="flex-shrink-0 mt-0.5 w-5 h-5 text-emerald" />
                     <div className="text-sm text-black/70">
-                      <p className="font-medium mb-1 text-black">Check your spam folder</p>
+                      <p className="mb-1 font-medium text-black">Check your spam folder</p>
                       <p>If you don't see the email, check your spam or junk folder. The code expires in 10 minutes.</p>
                     </div>
                   </div>
                 </div>
-
-                {/* Mobile Image - Shown only on mobile */}
-                <div className="mt-8 lg:hidden">
-                  <div className="aspect-[4/3] overflow-hidden rounded-2xl">
-                    <img
-                      src="https://images.unsplash.com/photo-1596524430615-b46475ddff6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                      alt="Email verification"
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
