@@ -290,22 +290,22 @@ export default function Landing() {
       </section>
 
       {/* Use Cases Section */}
-      <section className="py-24 bg-white">
+      <section className="py-12 sm:py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl sm:text-6xl font-bold text-black mb-4">
+          <div className="text-center mb-12 sm:mb-16 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-3 sm:mb-4">
               Perfect for Every Event
             </h2>
-            <p className="text-xl text-black/70 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg lg:text-xl text-black/70 max-w-2xl mx-auto px-4">
               From intimate gatherings to grand celebrations, PhotoLog works for any occasion
             </p>
           </div>
 
           {/* Event Type 1: Weddings */}
-          <div className="mb-16">
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
+          <div className="mb-12 sm:mb-14 lg:mb-16">
+            <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 items-center">
               <div className="lg:col-span-3 order-2 lg:order-1">
-                <div className="aspect-[16/10] overflow-hidden rounded-3xl">
+                <div className="aspect-[4/3] sm:aspect-[16/10] overflow-hidden rounded-2xl sm:rounded-3xl">
                   <img
                     src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80"
                     alt="Wedding celebration"
@@ -313,32 +313,32 @@ export default function Landing() {
                   />
                 </div>
               </div>
-              <div className="lg:col-span-2 order-1 lg:order-2 flex flex-col justify-center px-4 lg:px-8">
-                <h3 className="text-4xl sm:text-5xl font-bold text-black mb-4">
+              <div className="lg:col-span-2 order-1 lg:order-2 flex flex-col justify-center px-4 sm:px-6 lg:px-8">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-3 sm:mb-4">
                   Weddings
                 </h3>
-                <p className="text-lg text-black/70 leading-relaxed mb-6">
+                <p className="text-base sm:text-lg text-black/70 leading-relaxed mb-4 sm:mb-6">
                   Collect all the special moments from your big day. Guests share their favorite shots instantly, giving you memories from every angle.
                 </p>
-                <span className="text-sm text-deep-green uppercase tracking-wider font-medium">Share the Love</span>
+                <span className="text-xs sm:text-sm text-deep-green uppercase tracking-wider font-medium">Share the Love</span>
               </div>
             </div>
           </div>
 
           {/* Event Type 2: Corporate Events */}
-          <div className="mb-16">
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
-              <div className="lg:col-span-2 order-1 lg:order-1 flex flex-col justify-center px-4 lg:px-8 lg:text-right">
-                <h3 className="text-4xl sm:text-5xl font-bold text-black mb-4">
+          <div className="mb-12 sm:mb-14 lg:mb-16">
+            <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 items-center">
+              <div className="lg:col-span-2 order-1 lg:order-1 flex flex-col justify-center px-4 sm:px-6 lg:px-8 text-left lg:text-right">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-3 sm:mb-4">
                   Corporate Events
                 </h3>
-                <p className="text-lg text-black/70 leading-relaxed mb-6">
+                <p className="text-base sm:text-lg text-black/70 leading-relaxed mb-4 sm:mb-6">
                   Capture networking moments, presentations, and team celebrations. Professional galleries for professional gatherings.
                 </p>
-                <span className="text-sm text-teal-brown uppercase tracking-wider font-medium inline-block">Professional Network</span>
+                <span className="text-xs sm:text-sm text-teal-brown uppercase tracking-wider font-medium inline-block">Professional Network</span>
               </div>
               <div className="lg:col-span-3 order-2 lg:order-2">
-                <div className="aspect-[16/10] overflow-hidden rounded-3xl">
+                <div className="aspect-[4/3] sm:aspect-[16/10] overflow-hidden rounded-2xl sm:rounded-3xl">
                   <img
                     src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80"
                     alt="Corporate event"
@@ -350,10 +350,10 @@ export default function Landing() {
           </div>
 
           {/* Event Type 3: Birthday Celebrations */}
-          <div className="mb-16">
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
+          <div className="mb-12 sm:mb-14 lg:mb-16">
+            <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 items-center">
               <div className="lg:col-span-3 order-2 lg:order-1">
-                <div className="aspect-[16/10] overflow-hidden rounded-3xl">
+                <div className="aspect-[4/3] sm:aspect-[16/10] overflow-hidden rounded-2xl sm:rounded-3xl">
                   <img
                     src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80"
                     alt="Birthday party"
@@ -361,32 +361,32 @@ export default function Landing() {
                   />
                 </div>
               </div>
-              <div className="lg:col-span-2 order-1 lg:order-2 flex flex-col justify-center px-4 lg:px-8">
-                <h3 className="text-4xl sm:text-5xl font-bold text-black mb-4">
+              <div className="lg:col-span-2 order-1 lg:order-2 flex flex-col justify-center px-4 sm:px-6 lg:px-8">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-3 sm:mb-4">
                   Birthdays
                 </h3>
-                <p className="text-lg text-black/70 leading-relaxed mb-6">
+                <p className="text-base sm:text-lg text-black/70 leading-relaxed mb-4 sm:mb-6">
                   Make every birthday memorable. Friends and family share their favorite moments from the celebration in one beautiful gallery.
                 </p>
-                <span className="text-sm text-accent-pink uppercase tracking-wider font-medium">Celebrate Together</span>
+                <span className="text-xs sm:text-sm text-accent-pink uppercase tracking-wider font-medium">Celebrate Together</span>
               </div>
             </div>
           </div>
 
           {/* Event Type 4: Conferences */}
           <div>
-            <div className="grid lg:grid-cols-5 gap-8 items-center">
-              <div className="lg:col-span-2 order-1 lg:order-1 flex flex-col justify-center px-4 lg:px-8 lg:text-right">
-                <h3 className="text-4xl sm:text-5xl font-bold text-black mb-4">
+            <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 items-center">
+              <div className="lg:col-span-2 order-1 lg:order-1 flex flex-col justify-center px-4 sm:px-6 lg:px-8 text-left lg:text-right">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-3 sm:mb-4">
                   Conferences
                 </h3>
-                <p className="text-lg text-black/70 leading-relaxed mb-6">
+                <p className="text-base sm:text-lg text-black/70 leading-relaxed mb-4 sm:mb-6">
                   Document sessions, keynotes, and networking. Participants share insights and connections from across the event.
                 </p>
-                <span className="text-sm text-deep-gold uppercase tracking-wider font-medium inline-block">Connect & Share</span>
+                <span className="text-xs sm:text-sm text-deep-gold uppercase tracking-wider font-medium inline-block">Connect & Share</span>
               </div>
               <div className="lg:col-span-3 order-2 lg:order-2">
-                <div className="aspect-[16/10] overflow-hidden rounded-3xl">
+                <div className="aspect-[4/3] sm:aspect-[16/10] overflow-hidden rounded-2xl sm:rounded-3xl">
                   <img
                     src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80"
                     alt="Tech conference"
