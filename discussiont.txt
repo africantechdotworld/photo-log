@@ -1,3 +1,6 @@
+Project Description:
+This platform lets event hosts instantly create a shared photo gallery for their events. Once registered, a host receives a unique QR code and link that guests can scan to upload pictures directly from their phones—no app or signup required. The host has full control to view, approve, or delete any uploaded photos, keeping the gallery clean and curated. An admin dashboard provides system oversight for managing events and monitoring content across the platform.
+
 # FRONTEND
 
 i. Landing Page
@@ -9,7 +12,7 @@ ii. Authentication Pages
 -- Forget Password
 
 iii. Event Dashboard (Host Control Panel)
-- View event details (name, link, QR, date, etc.)1
+- View event details (name, link, QR, date, etc.)
 - Show all uploaded photos from visitors.
 - Delete any unwanted photos.
 - Option to “Download All” as ZIP or “Delete Event”.
@@ -52,3 +55,21 @@ x. Optional Pages
 - Pricing Page (if you plan freemium tiers later)
 - Terms & Privacy (important if you go public)
 - About / Contact
+
+
+# Theme
+
+Green
+Hex code: #50C878
+RGB: (80, 200, 120)
+
+Gold
+Hex code: #FFD700
+RGB: (255, 215, 0)
+
+What we need for this color is that the color should be a deep gold and shining (gold + little touch of silver gradient for the shining effect) as well as the green should be deep green.
+
+
+Tech Stack for FRONTEND
+
+ReactJS + Vite + TailwindCSS v3.14 (stable version, don't use v4!)
