@@ -67,7 +67,7 @@ export default function Landing() {
             {/* Right Side - Image Grid */}
             <div className="grid grid-cols-2 gap-4">
               {/* Top Left - Waiters with champagne */}
-              <div className="aspect-square overflow-hidden rounded-lg">
+              <div className="aspect-square overflow-hidden rounded-xl">
                 <img
                   src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                   alt="Event staff serving champagne"
@@ -76,7 +76,7 @@ export default function Landing() {
               </div>
               
               {/* Top Right - Decorated entrance */}
-              <div className="aspect-square overflow-hidden rounded-lg">
+              <div className="aspect-square overflow-hidden rounded-xl">
                 <img
                   src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                   alt="Decorated event entrance"
@@ -85,7 +85,7 @@ export default function Landing() {
               </div>
               
               {/* Bottom Left - Bride and groom at archway */}
-              <div className="aspect-square overflow-hidden rounded-lg">
+              <div className="aspect-square overflow-hidden rounded-xl">
                 <img
                   src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                   alt="Wedding couple at archway"
@@ -94,7 +94,7 @@ export default function Landing() {
               </div>
               
               {/* Bottom Right - Outdoor dining event */}
-              <div className="aspect-square overflow-hidden rounded-lg">
+              <div className="aspect-square overflow-hidden rounded-xl">
                 <img
                   src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                   alt="Outdoor event dining"
@@ -122,7 +122,7 @@ export default function Landing() {
           <div className="mb-32">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="order-2 lg:order-1">
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-[4/3] overflow-hidden rounded-2xl">
                   <img
                     src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
                     alt="Creating event on PhotoLog"
@@ -160,7 +160,7 @@ export default function Landing() {
                   Get your unique QR code and shareable link instantly. Display it at your venue or share digitally with your guests.
                 </p>
               </div>
-              <div className="aspect-[4/3] overflow-hidden">
+              <div className="aspect-[4/3] overflow-hidden rounded-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
                   alt="QR code display at event"
@@ -174,7 +174,7 @@ export default function Landing() {
           <div>
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="order-2 lg:order-1">
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-[4/3] overflow-hidden rounded-2xl">
                   <img
                     src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
                     alt="Guests uploading photos"
@@ -193,6 +193,96 @@ export default function Landing() {
                 <p className="text-xl text-black/70 leading-relaxed mb-8">
                   Guests scan and upload photos instantly from their phones. You moderate, download, and keep all the memories in one place.
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Key Features Section */}
+      <section className="py-24 bg-deep-green">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl sm:text-6xl font-bold text-white mb-4">
+              Why PhotoLog
+            </h2>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto">
+              Everything you need to collect and manage event photos effortlessly
+            </p>
+          </div>
+
+          {/* Feature 1: Full-width image with overlay text */}
+          <div className="mb-32 relative">
+            <div className="aspect-[21/9] overflow-hidden rounded-3xl">
+              <img
+                src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+                alt="Phone scanning QR code"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-deep-green via-deep-green/80 to-transparent flex items-center">
+              <div className="max-w-2xl px-8 lg:px-12 py-12">
+                <h3 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+                  No App Required
+                </h3>
+                <p className="text-xl text-white/90 leading-relaxed mb-4">
+                  Guests simply scan your QR code and upload photos directly from their phone's browser. No downloads, no signups, no hassle.
+                </p>
+                <span className="text-sm text-white/70 uppercase tracking-wider">Instant Access</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Feature 2: Centered text with side-by-side images */}
+          <div className="mb-32">
+            <div className="text-center mb-12 max-w-3xl mx-auto">
+              <h3 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+                Full Control
+              </h3>
+              <p className="text-xl text-white/80 leading-relaxed mb-8">
+                Moderate every photo before it goes live. Delete unwanted images, download everything as a ZIP, or remove your event entirely—you're in complete control.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="aspect-[4/3] overflow-hidden rounded-xl">
+                <img
+                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                  alt="Dashboard with photo management"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="aspect-[4/3] overflow-hidden rounded-xl">
+                <img
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                  alt="Photo moderation interface"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <div className="text-center mt-8">
+              <span className="text-sm text-white/60 uppercase tracking-wider">Your Gallery, Your Rules</span>
+            </div>
+          </div>
+
+          {/* Feature 3: Split screen with gradient */}
+          <div className="grid lg:grid-cols-2 gap-0 overflow-hidden rounded-3xl">
+            <div className="aspect-[3/4] lg:aspect-auto overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                alt="Secure event gallery"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="bg-gradient-to-br from-teal-brown to-deep-green flex flex-col justify-center px-8 lg:px-12 py-16">
+              <h3 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+                Privacy First
+              </h3>
+              <p className="text-xl text-white/90 leading-relaxed mb-8">
+                Optional password protection keeps your gallery secure. Only people with your QR code or link can access and upload photos.
+              </p>
+              <div className="flex items-center space-x-2 text-white/70">
+                <div className="h-px w-12 bg-white/40"></div>
+                <span className="text-sm uppercase tracking-wider">Secure & Private</span>
               </div>
             </div>
           </div>
