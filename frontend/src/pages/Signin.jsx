@@ -1,19 +1,17 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-export default function Signup() {
+export default function Signin() {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    terms: false,
+    rememberMe: false,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle signup logic here
-    console.log('Signup submitted', formData);
+    // Handle signin logic here
+    console.log('Signin submitted', formData);
   };
 
   const handleChange = (e) => {
@@ -37,13 +35,13 @@ export default function Signup() {
               </Link>
               <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
                 <span className="hidden sm:inline text-xs sm:text-sm lg:text-base text-black/60 whitespace-nowrap">
-                  Already have an account?
+                  Don't have an account?
                 </span>
                 <Link
-                  to="/signin"
+                  to="/signup"
                   className="text-xs sm:text-sm lg:text-base font-medium text-black transition-colors hover:text-deep-green whitespace-nowrap px-2 sm:px-0"
                 >
-                  Sign In
+                  Sign Up
                 </Link>
               </div>
             </div>
@@ -56,8 +54,8 @@ export default function Signup() {
               <div className="relative">
                 <div className="aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-3xl">
                   <img
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                    alt="People sharing photos at an event"
+                    src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                    alt="Welcome back to PhotoLog"
                     className="object-cover w-full h-full"
                   />
                 </div>
@@ -66,45 +64,28 @@ export default function Signup() {
                 {/* Text overlay */}
                 <div className="absolute right-0 bottom-0 left-0 p-6 sm:p-8 lg:p-10">
                   <h2 className="mb-3 text-2xl font-bold text-white sm:text-3xl lg:text-4xl sm:mb-4">
-                    Start Collecting Memories
+                    Welcome Back
                   </h2>
                   <p className="text-base leading-relaxed sm:text-lg text-white/90">
-                    Join thousands of event hosts who trust PhotoLog to capture and share their special moments.
+                    Continue collecting and sharing event photos with your account.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Right Side - Signup Form */}
+            {/* Right Side - Signin Form */}
             <div className="flex flex-col justify-center">
               <div className="mx-auto w-full max-w-md">
                 <div className="mb-6 sm:mb-8">
                   <h1 className="mb-3 text-3xl font-bold text-black sm:text-4xl lg:text-5xl sm:mb-4">
-                    Create Your Account
+                    Sign In
                   </h1>
                   <p className="text-base sm:text-lg text-black/70">
-                    Get started in seconds. No credit card required.
+                    Enter your credentials to access your account.
                   </p>
                 </div>
 
                 <form className="space-y-5 sm:space-y-6" onSubmit={handleSubmit}>
-                  {/* Full Name */}
-                  <div>
-                    <label htmlFor="name" className="block mb-2 text-sm font-medium text-black sm:text-base">
-                      Full Name
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="px-4 py-3 w-full text-black bg-white rounded-xl border transition-all border-black/10 placeholder-black/40 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-transparent"
-                      placeholder="John Doe"
-                    />
-                  </div>
-
                   {/* Email */}
                   <div>
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-black sm:text-base">
@@ -132,57 +113,38 @@ export default function Signup() {
                       id="password"
                       name="password"
                       type="password"
-                      autoComplete="new-password"
+                      autoComplete="current-password"
                       required
                       value={formData.password}
                       onChange={handleChange}
                       className="px-4 py-3 w-full text-black bg-white rounded-xl border transition-all border-black/10 placeholder-black/40 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-transparent"
                       placeholder="••••••••"
                     />
-                    <p className="mt-2 text-xs sm:text-sm text-black/50">
-                      Must be at least 8 characters
-                    </p>
                   </div>
 
-                  {/* Confirm Password */}
-                  <div>
-                    <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-black sm:text-base">
-                      Confirm Password
-                    </label>
-                    <input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      autoComplete="new-password"
-                      required
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className="px-4 py-3 w-full text-black bg-white rounded-xl border transition-all border-black/10 placeholder-black/40 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-transparent"
-                      placeholder="••••••••"
-                    />
-                  </div>
-
-                  {/* Terms Checkbox */}
-                  <div className="flex items-start space-x-3">
-                    <input
-                      id="terms"
-                      name="terms"
-                      type="checkbox"
-                      required
-                      checked={formData.terms}
-                      onChange={handleChange}
-                      className="mt-1 w-4 h-4 rounded border-black/20 text-deep-green focus:ring-2 focus:ring-deep-green focus:ring-offset-0"
-                    />
-                    <label htmlFor="terms" className="text-sm leading-relaxed sm:text-base text-black/70">
-                      I agree to the{' '}
-                      <a href="#" className="font-medium transition-colors text-deep-green hover:text-emerald">
-                        Terms of Service
-                      </a>{' '}
-                      and{' '}
-                      <a href="#" className="font-medium transition-colors text-deep-green hover:text-emerald">
-                        Privacy Policy
-                      </a>
-                    </label>
+                  {/* Remember Me & Forgot Password */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-start space-x-3">
+                      <input
+                        id="rememberMe"
+                        name="rememberMe"
+                        type="checkbox"
+                        checked={formData.rememberMe}
+                        onChange={handleChange}
+                        className="mt-1 w-4 h-4 rounded border-black/20 text-deep-green focus:ring-2 focus:ring-deep-green focus:ring-offset-0"
+                      />
+                      <label htmlFor="rememberMe" className="text-sm sm:text-base text-black/70">
+                        Remember me
+                      </label>
+                    </div>
+                    <div>
+                      <Link
+                        to="/forgot-password"
+                        className="text-sm font-medium transition-colors sm:text-base text-deep-green hover:text-emerald"
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
                   </div>
 
                   {/* Submit Button */}
@@ -190,7 +152,7 @@ export default function Signup() {
                     type="submit"
                     className="px-6 py-3 w-full text-base font-semibold text-white rounded-xl transition-colors sm:py-4 bg-deep-green sm:text-lg hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2"
                   >
-                    Create Account
+                    Sign In
                   </button>
                 </form>
 
@@ -204,7 +166,7 @@ export default function Signup() {
                   </div>
                 </div>
 
-                {/* Social Signup Buttons */}
+                {/* Social Signin Buttons */}
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <button
                     type="button"
@@ -233,8 +195,8 @@ export default function Signup() {
                 <div className="mt-8 lg:hidden">
                   <div className="aspect-[4/3] overflow-hidden rounded-2xl">
                     <img
-                      src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
-                      alt="People sharing photos at an event"
+                      src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                      alt="Welcome back to PhotoLog"
                       className="object-cover w-full h-full"
                     />
                   </div>
