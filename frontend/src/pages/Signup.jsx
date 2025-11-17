@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { signUp, signInWithGoogle } from '../services/api';
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,12 +12,63 @@ export default function Signup() {
     terms: false,
   });
 
-  const handleSubmit = (e) => {
+ const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle signup logic here
-    console.log('Signup submitted', formData);
+    setError('');
+
+    // Validate passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    // Validate password length
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
+    if (!formData.terms) {
+      setError('You must accept the Terms of Service');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await signUp(formData.email, formData.password, formData.name);
+      navigate('/'); // Redirect to home or dashboard
+    } catch (err) {
+      // Handle Firebase-specific errors
+      const message = err.message || 'Failed to create account';
+      if (message.includes('email-already-in-use')) {
+        setError('Email is already registered');
+      } else if (message.includes('weak-password')) {
+        setError('Password is too weak');
+      } else {
+        setError(message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const handleGoogleSignUp = async () => {
+    setError('');
+    setLoading(true);
+
+    try {
+      await signInWithGoogle();
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Failed to sign up with Google.');
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -93,6 +146,11 @@ export default function Signup() {
                     <label htmlFor="name" className="block mb-2 text-sm font-medium text-black sm:text-base">
                       Full Name
                     </label>
+                    {error && (
+                    <div className="p-3 rounded-xl bg-red-50 border border-red-200">
+                      <p className="text-sm text-red-700">{error}</p>
+                    </div>
+                  )}
                     <input
                       id="name"
                       name="name"
@@ -188,9 +246,10 @@ export default function Signup() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="px-6 py-3 w-full text-base font-semibold text-white rounded-xl transition-colors sm:py-4 bg-deep-green sm:text-lg hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2"
+                    disabled={loading}
+                    className="px-6 py-3 w-full text-base font-semibold text-white rounded-xl transition-colors sm:py-4 bg-deep-green sm:text-lg hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Create Account
+                    {loading ? 'Creating Account...' : 'Create Account'}
                   </button>
                 </form>
 
@@ -208,6 +267,8 @@ export default function Signup() {
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <button
                     type="button"
+                    onClick={handleGoogleSignUp}
+                    disabled={loading}
                     className="flex justify-center items-center px-4 py-3 text-black bg-white rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
                   >
                     <svg className="mr-2 w-5 h-5" viewBox="0 0 24 24">
