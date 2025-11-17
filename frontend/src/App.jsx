@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
-//import Signup from './pages/Signup';
+import Signup from './pages/Signup';
 //import Signin from './pages/Signin';
 //import VerifyEmail from './pages/VerifyEmail';
 //import ForgotPassword from './pages/ForgotPassword';
@@ -17,8 +17,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
-        {/*<Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+        {/*<Route path="/signin" element={<Signin />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/create-event" element={<CreateEvent />} />
