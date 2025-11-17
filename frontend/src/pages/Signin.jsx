@@ -1,18 +1,46 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import {signIn, signInWithGoogle } from '../services/api'
 
 export default function Signin() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberMe: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle signin logic here
-    console.log('Signin submitted', formData);
+    setError('');
+    setLoading(true);
+
+    try {
+      await signIn(formData.email, formData.password);
+      navigate('/'); // Redirect to home or dashboard
+    } catch (err) {
+      setError(err.message || 'Failed to sign in. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setLoading(true);
+
+    try {
+      await signInWithGoogle();
+      navigate('/');
+    } catch (err) {
+      setError(err.message || 'Failed to sign in with Google.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -91,6 +119,11 @@ export default function Signin() {
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-black sm:text-base">
                       Email Address
                     </label>
+                    {error && (
+                      <div className="p-3 rounded-xl bg-red-50 border border-red-200">
+                        <p className="text-sm text-red-700">{error}</p>
+                      </div>
+                    )}
                     <input
                       id="email"
                       name="email"
@@ -150,9 +183,10 @@ export default function Signin() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="px-6 py-3 w-full text-base font-semibold text-white rounded-xl transition-colors sm:py-4 bg-deep-green sm:text-lg hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2"
+                      disabled={loading}
+                      className="px-6 py-3 w-full text-base font-semibold text-white rounded-xl transition-colors sm:py-4 bg-deep-green sm:text-lg hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Sign In
+                      {loading ? 'Signing In...' : 'Sign In'}
                   </button>
                 </form>
 
@@ -170,6 +204,8 @@ export default function Signin() {
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <button
                     type="button"
+                    onClick={handleGoogleSignIn}
+                    disabled={loading}
                     className="flex justify-center items-center px-4 py-3 text-black bg-white rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
                   >
                     <svg className="mr-2 w-5 h-5" viewBox="0 0 24 24">
