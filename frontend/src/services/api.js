@@ -103,7 +103,8 @@ export async function signIn(email, password) {
     throw new Error(error.detail || "Failed to sign in");
   }
 
-  return response.json();
+  const data = await response.json();
+  return data;
 }
 
 /**
@@ -151,6 +152,36 @@ export async function signOut() {
 export async function sendPasswordReset(email) {
   const { sendPasswordResetEmail } = await import("firebase/auth");
   await sendPasswordResetEmail(auth, email);
+}
+
+/**
+ * Send email verification link
+ * Sends verification email via Firebase and notifies backend
+ * @param {string} email - User's email address
+ */
+export async function sendEmailVerification(email) {
+  const { sendEmailVerification: firebaseSendEmailVerification } = await import("firebase/auth");
+  
+  // Get current user
+  if (!auth.currentUser) {
+    throw new Error("No user is currently signed in");
+  }
+  
+  // Send verification email via Firebase
+  await firebaseSendEmailVerification(auth.currentUser);
+  
+  // Notify backend (optional - backend just acknowledges)
+  try {
+    await fetch(`${API_BASE_URL}/auth/resend-verification`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    // Don't fail if backend call fails, Firebase email is what matters
+    console.warn("Failed to notify backend of verification email:", error);
+  }
 }
 
 /**

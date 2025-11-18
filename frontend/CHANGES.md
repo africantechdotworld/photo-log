@@ -10,6 +10,7 @@ This file tracks all files that have been edited during the current work session
 - Fixed `signIn()` function to call `/auth/signin` endpoint instead of `/me` endpoint
 - Fixed `signInWithGoogle()` function to send token in request body instead of Authorization header
 - Added better error handling for 404 errors in `signIn()` function
+- Added `sendEmailVerification()` function to send email verification link via Firebase and notify backend
 
 **Date:** Current session
 
@@ -30,6 +31,18 @@ This file tracks all files that have been edited during the current work session
 - Updated to receive email from navigation state (from signup page)
 - Added `useLocation` hook to access route state
 - Email now displays the actual user email instead of placeholder
+
+**Date:** Current session
+
+---
+
+### 4. `src/pages/Signin.jsx`
+**Changes made:**
+- Added email verification check after successful signin
+- If email is not verified, automatically sends verification email via Firebase
+- Redirects to `/verify-email` page if email is not verified
+- Redirects to home page if email is verified
+- Applied same logic to both email/password and Google sign-in flows
 
 **Date:** Current session
 
