@@ -40,7 +40,7 @@ export default function Signup() {
 
     try {
       await signUp(formData.email, formData.password, formData.name);
-      navigate('/'); // Redirect to home or dashboard
+      navigate('/verify-email', { state: { email: formData.email } });
     } catch (err) {
       // Handle Firebase-specific errors
       const message = err.message || 'Failed to create account';
@@ -48,6 +48,8 @@ export default function Signup() {
         setError('Email is already registered');
       } else if (message.includes('weak-password')) {
         setError('Password is too weak');
+      } else if (message.includes('operation-not-allowed')) {
+        setError('Email/Password authentication is not enabled. Please contact support.');
       } else {
         setError(message);
       }
@@ -83,18 +85,18 @@ export default function Signup() {
         {/* Cream Content Area with Rounded Corners */}
         <div className="overflow-hidden rounded-2xl bg-cream sm:rounded-3xl">
           {/* Header Navigation */}
-          <nav className="px-4 py-3 sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-b border-cream-dark/20">
-            <div className="flex justify-between items-center gap-2 sm:gap-4">
-              <Link to="/" className="text-lg sm:text-xl lg:text-2xl font-bold text-black flex-shrink-0">
+          <nav className="px-4 py-3 border-b sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-cream-dark/20">
+            <div className="flex gap-2 justify-between items-center sm:gap-4">
+              <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
                 PhotoLog
               </Link>
-              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
-                <span className="hidden sm:inline text-xs sm:text-sm lg:text-base text-black/60 whitespace-nowrap">
+              <div className="flex gap-2 items-center sm:gap-3 lg:gap-4">
+                <span className="hidden text-xs whitespace-nowrap sm:inline sm:text-sm lg:text-base text-black/60">
                   Already have an account?
                 </span>
                 <Link
                   to="/signin"
-                  className="text-xs sm:text-sm lg:text-base font-medium text-black transition-colors hover:text-deep-green whitespace-nowrap px-2 sm:px-0"
+                  className="px-2 text-xs font-medium text-black whitespace-nowrap transition-colors sm:text-sm lg:text-base hover:text-deep-green sm:px-0"
                 >
                   Sign In
                 </Link>
@@ -147,7 +149,7 @@ export default function Signup() {
                       Full Name
                     </label>
                     {error && (
-                    <div className="p-3 rounded-xl bg-red-50 border border-red-200">
+                    <div className="p-3 bg-red-50 rounded-xl border border-red-200">
                       <p className="text-sm text-red-700">{error}</p>
                     </div>
                   )}

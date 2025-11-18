@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import { EnvelopeIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 
 export default function VerifyEmail() {
+  const location = useLocation();
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [email, setEmail] = useState('user@example.com'); // This would come from route state or context
+  const [email, setEmail] = useState(location.state?.email || 'user@example.com');
   const [resendCooldown, setResendCooldown] = useState(0);
   const inputRefs = useRef([]);
 

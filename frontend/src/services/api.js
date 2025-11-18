@@ -1,5 +1,5 @@
 // src/services/api.js
-import { auth } from "../firebase";
+import { auth } from "../lib/firebase";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
@@ -57,12 +57,9 @@ export async function signUp(email, password, name) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${idToken}`,
     },
     body: JSON.stringify({
-      email,
-      name,
-      uid: userCredential.user.uid,
+      token: idToken,
     }),
   });
 
@@ -86,16 +83,24 @@ export async function signIn(email, password) {
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
   const idToken = await userCredential.user.getIdToken();
 
-  // Optional: Verify user exists on backend
-  const response = await fetch(`${API_BASE_URL}/profile/me`, {
-    method: "GET",
+  // Call backend signin endpoint (creates user in DB if missing)
+  const signinUrl = `${API_BASE_URL}/auth/signin`;
+  const response = await fetch(signinUrl, {
+    method: "POST",
     headers: {
-      "Authorization": `Bearer ${idToken}`,
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      token: idToken,
+    }),
   });
 
   if (!response.ok) {
-    throw new Error("User not found on backend");
+    const error = await response.json().catch(() => ({}));
+    if (response.status === 404) {
+      throw new Error(`Backend endpoint not found. Is the server running at ${API_BASE_URL}?`);
+    }
+    throw new Error(error.detail || "Failed to sign in");
   }
 
   return response.json();
@@ -118,12 +123,9 @@ export async function signInWithGoogle() {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${idToken}`,
     },
     body: JSON.stringify({
-      email: userCredential.user.email,
-      name: userCredential.user.displayName,
-      uid: userCredential.user.uid,
+      token: idToken,
     }),
   });
 
