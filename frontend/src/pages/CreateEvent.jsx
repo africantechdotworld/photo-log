@@ -7,7 +7,7 @@ import {
   CheckIcon,
   QrCodeIcon 
 } from '@heroicons/react/24/outline';
-
+import { createEvent, uploadEventCover } from '../services/api';
 export default function CreateEvent() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -20,9 +20,9 @@ export default function CreateEvent() {
   });
   const [previewUrl, setPreviewUrl] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const [eventLink, setEventLink] = useState('');
-  const [qrCodeUrl, setQrCodeUrl] = useState('');
-
+  const [createdEvent, setCreatedEvent] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -30,7 +30,6 @@ export default function CreateEvent() {
       [name]: type === 'checkbox' ? checked : value
     }));
   };
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -42,30 +41,54 @@ export default function CreateEvent() {
       reader.readAsDataURL(file);
     }
   };
-
   const handleRemovePhoto = () => {
     setPreviewUrl(null);
     setFormData(prev => ({ ...prev, coverPhoto: null }));
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle event creation logic here
-    console.log('Event created:', formData);
-    
-    // Generate mock event link and QR code for now
-    const mockEventId = 'event-' + Math.random().toString(36).substr(2, 9);
-    const mockLink = `${window.location.origin}/event/${mockEventId}`;
-    setEventLink(mockLink);
-    
-    // For QR code, we'll use a placeholder service or generate it client-side
-    // Using a QR code API service for now (you can replace with actual QR generation)
-    setQrCodeUrl(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(mockLink)}`);
-    
-    setSubmitted(true);
+    setError('');
+    setLoading(true);
+    try {
+      // Prepare event data for API
+      const eventData = {
+        name: formData.name,
+        description: formData.description || null,
+        date: new Date(formData.date).toISOString(), // Convert date to ISO datetime
+        password: formData.usePassword && formData.password ? formData.password : null,
+      };
+      // Create the event
+      let newEvent = await createEvent(eventData);
+      // Upload cover photo if provided
+      if (formData.coverPhoto) {
+        try {
+          // Upload cover and get updated event with cover URLs
+          newEvent = await uploadEventCover(newEvent.id, formData.coverPhoto);
+        } catch (coverError) {
+          console.warn('Failed to upload cover image:', coverError);
+          // Don't fail the whole operation if cover upload fails
+          // Event is already created, continue with event without cover
+        }
+      }
+      setCreatedEvent(newEvent);
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.message || 'Failed to create event. Please try again.');
+      console.error('Error creating event:', err);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  if (submitted) {
+  const getEventLink = (event) => {
+    return event.share_link || `${window.location.origin}/event/${event.id}`;
+  };
+  const getQRCodeUrl = (event) => {
+    const link = getEventLink(event);
+    return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(link)}`;
+  };
+  if (submitted && createdEvent) {
+    const eventLink = getEventLink(createdEvent);
+    const qrCodeUrl = getQRCodeUrl(createdEvent);
     return (
       <div className="min-h-screen bg-deep-green">
         <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-12">
@@ -84,22 +107,18 @@ export default function CreateEvent() {
                 </Link>
               </div>
             </nav>
-
             {/* Success State */}
             <div className="flex flex-col justify-center px-4 py-8 sm:px-6 lg:px-12 sm:py-12 lg:py-16">
               <div className="mx-auto w-full max-w-2xl text-center">
                 <div className="inline-flex justify-center items-center mb-4 w-16 h-16 rounded-full bg-emerald/10 text-emerald">
                   <CheckIcon className="w-8 h-8" />
                 </div>
-                
                 <h1 className="mb-3 text-3xl font-bold text-black sm:text-4xl lg:text-5xl sm:mb-4">
                   Event Created!
                 </h1>
-                
                 <p className="mb-8 text-base leading-relaxed sm:text-lg text-black/70 sm:mb-10">
-                  Your event is ready. Share the QR code or link with your guests to start collecting photos.
+                  Your event "{createdEvent.name}" is ready. Share the QR code or link with your guests to start collecting photos.
                 </p>
-
                 {/* QR Code and Link Section */}
                 <div className="grid gap-8 sm:grid-cols-2 mb-8 sm:mb-10">
                   {/* QR Code */}
@@ -122,7 +141,6 @@ export default function CreateEvent() {
                     </div>
                     <p className="text-sm text-black/60">Display at your venue for easy scanning</p>
                   </div>
-
                   {/* Event Link */}
                   <div className="p-6 rounded-2xl bg-white border-2 border-black/5">
                     <h3 className="mb-4 text-lg font-semibold text-black">Shareable Link</h3>
@@ -140,7 +158,6 @@ export default function CreateEvent() {
                     </button>
                   </div>
                 </div>
-
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Link
@@ -152,6 +169,7 @@ export default function CreateEvent() {
                   <button
                     onClick={() => {
                       setSubmitted(false);
+                      setCreatedEvent(null);
                       setFormData({
                         name: '',
                         description: '',
@@ -161,6 +179,7 @@ export default function CreateEvent() {
                         usePassword: false,
                       });
                       setPreviewUrl(null);
+                      setError('');
                     }}
                     className="px-6 py-3 text-base font-semibold text-black rounded-xl transition-colors sm:py-4 border-2 border-black/10 sm:text-lg hover:bg-cream-dark"
                   >
@@ -174,7 +193,6 @@ export default function CreateEvent() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-deep-green">
       <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-12">
@@ -193,7 +211,6 @@ export default function CreateEvent() {
               </Link>
             </div>
           </nav>
-
           {/* Main Content */}
           <div className="px-4 py-8 sm:px-6 lg:px-12 sm:py-12 lg:py-16">
             <div className="mx-auto w-full max-w-3xl">
@@ -206,7 +223,12 @@ export default function CreateEvent() {
                   Set up your event and get a unique QR code for photo sharing
                 </p>
               </div>
-
+              {/* Error Message */}
+              {error && (
+                <div className="p-4 mb-6 rounded-xl border bg-red-50 border-red-200">
+                  <p className="text-sm text-red-700">{error}</p>
+                </div>
+              )}
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
                 {/* Event Name */}
@@ -225,7 +247,6 @@ export default function CreateEvent() {
                     className="px-4 py-3 w-full text-black bg-white rounded-xl border transition-all border-black/10 placeholder-black/40 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-transparent"
                   />
                 </div>
-
                 {/* Description */}
                 <div>
                   <label htmlFor="description" className="block mb-2 text-sm font-medium text-black sm:text-base">
@@ -242,7 +263,6 @@ export default function CreateEvent() {
                   />
                   <p className="mt-2 text-xs sm:text-sm text-black/50">This will be visible to all guests</p>
                 </div>
-
                 {/* Event Date */}
                 <div>
                   <label htmlFor="date" className="block mb-2 text-sm font-medium text-black sm:text-base">
@@ -263,7 +283,6 @@ export default function CreateEvent() {
                     />
                   </div>
                 </div>
-
                 {/* Cover Photo */}
                 <div>
                   <label className="block mb-2 text-sm font-medium text-black sm:text-base">
@@ -304,7 +323,6 @@ export default function CreateEvent() {
                     )}
                   </div>
                 </div>
-
                 {/* Optional Password Toggle */}
                 <div>
                   <div className="flex items-start space-x-3">
@@ -321,7 +339,6 @@ export default function CreateEvent() {
                     </label>
                   </div>
                 </div>
-
                 {/* Password Input (shown when toggle is on) */}
                 {formData.usePassword && (
                   <div>
@@ -345,7 +362,6 @@ export default function CreateEvent() {
                     <p className="mt-2 text-xs sm:text-sm text-black/50">Guests will need this password to upload photos</p>
                   </div>
                 )}
-
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-6">
                   <Link
@@ -356,13 +372,13 @@ export default function CreateEvent() {
                   </Link>
                   <button
                     type="submit"
-                    className="flex-1 px-6 py-3 text-base font-semibold text-white rounded-xl transition-colors sm:text-lg bg-deep-green hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2"
+                    disabled={loading}
+                    className="flex-1 px-6 py-3 text-base font-semibold text-white rounded-xl transition-colors sm:text-lg bg-deep-green hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Create Event
+                    {loading ? 'Creating Event...' : 'Create Event'}
                   </button>
                 </div>
               </form>
-
               {/* Info Box */}
               <div className="mt-8 p-6 rounded-xl bg-emerald/5 border border-emerald/20">
                 <h3 className="mb-4 text-lg font-semibold text-black">What happens next?</h3>
@@ -392,4 +408,3 @@ export default function CreateEvent() {
     </div>
   );
 }
-
