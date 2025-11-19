@@ -11,13 +11,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
 import { getEvents, deleteEvent } from '../services/api';
-import { useState, useEffect } from 'react';
-import { getEvents, deleteEvent } from '../services/api';
 
 export default function EventDashboard() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -40,39 +35,7 @@ export default function EventDashboard() {
     }
   };
   const handleDelete = async (eventId) => {
-  const [deletingEventId, setDeletingEventId] = useState(null);
-
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const response = await getEvents(1, 100);
-      setEvents(response.events || []);
-    } catch (err) {
-      setError(err.message || 'Failed to load events. Please try again.');
-      console.error('Error fetching events:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (eventId) => {
     if (window.confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
-      try {
-        setDeletingEventId(eventId);
-        await deleteEvent(eventId);
-        // Remove event from local state
-        setEvents(events.filter(e => e.id !== eventId));
-      } catch (err) {
-        alert(err.message || 'Failed to delete event. Please try again.');
-        console.error('Error deleting event:', err);
-      } finally {
-        setDeletingEventId(null);
-      }
       try {
         setDeletingEventId(eventId);
         await deleteEvent(eventId);
@@ -93,19 +56,9 @@ export default function EventDashboard() {
   const handleCopyLink = (event) => {
     const link = event.share_link || `${window.location.origin}/event/${event.id}`;
     navigator.clipboard.writeText(link);
-
-  const handleCopyLink = (event) => {
-    const link = event.share_link || `${window.location.origin}/event/${event.id}`;
-    navigator.clipboard.writeText(link);
     // You could add a toast notification here
   };
-  const getQRCodeUrl = (event) => {
-    const link = event.share_link || `${window.location.origin}/event/${event.id}`;
-    return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link)}`;
-  };
-  const totalPhotos = events.reduce((sum, event) => sum + (event.photo_count || 0), 0);
-  const totalViews = 0; // View count not available in current API response
-
+  
   const getQRCodeUrl = (event) => {
     const link = event.share_link || `${window.location.origin}/event/${event.id}`;
     return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link)}`;
@@ -186,15 +139,9 @@ export default function EventDashboard() {
                 </div>
               </div>
               {/* Active Events */}
-              
-              {/* Active Events */}
               <div className="p-4 bg-white rounded-xl border sm:p-6 sm:rounded-2xl border-black/5">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-xs font-medium sm:text-sm text-black/60">Active Events</p>
-                    <p className="mt-1 text-2xl font-bold text-black sm:text-3xl">
-                      {events.filter(e => e.is_active && !e.is_archived).length}
-                    </p>
                     <p className="text-xs font-medium sm:text-sm text-black/60">Active Events</p>
                     <p className="mt-1 text-2xl font-bold text-black sm:text-3xl">
                       {events.filter(e => e.is_active && !e.is_archived).length}
@@ -246,15 +193,12 @@ export default function EventDashboard() {
                           <div className="overflow-hidden relative w-full h-32 rounded-xl lg:w-48 sm:h-40 lg:h-48">
                             <img
                               src={event.cover_thumbnail_url || event.cover_image_url || "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"}
-                              src={event.cover_thumbnail_url || event.cover_image_url || "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"}
                               alt={event.name}
                               className="object-cover w-full h-full"
                             />
                             {!event.is_active && (
-                            {!event.is_active && (
                               <div className="flex absolute inset-0 justify-center items-center bg-black/40">
                                 <span className="px-3 py-1 text-xs font-medium text-white rounded-full bg-black/60">
-                                  {event.is_archived ? 'Archived' : 'Inactive'}
                                   {event.is_archived ? 'Archived' : 'Inactive'}
                                 </span>
                               </div>
@@ -269,11 +213,9 @@ export default function EventDashboard() {
                                 <h3 className="text-xl font-bold text-black sm:text-2xl">{event.name}</h3>
                                 <span className={`px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium rounded-full ${
                                   event.is_active && !event.is_archived
-                                  event.is_active && !event.is_archived
                                     ? 'bg-emerald/10 text-emerald' 
                                     : 'bg-black/5 text-black/60'
                                 }`}>
-                                  {event.is_archived ? 'Archived' : event.is_active ? 'Active' : 'Inactive'}
                                   {event.is_archived ? 'Archived' : event.is_active ? 'Active' : 'Inactive'}
                                 </span>
                               </div>
@@ -284,7 +226,6 @@ export default function EventDashboard() {
                                 </div>
                                 <div className="flex gap-2 items-center">
                                   <PhotoIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                                  <span>{event.photo_count || 0} photos</span>
                                   <span>{event.photo_count || 0} photos</span>
                                 </div>
                               </div>
@@ -308,7 +249,6 @@ export default function EventDashboard() {
                             </button>
                             <button
                               onClick={() => handleCopyLink(event)}
-                              onClick={() => handleCopyLink(event)}
                               className="inline-flex gap-2 items-center px-4 py-2 text-sm font-medium text-black rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
                             >
                               <LinkIcon className="w-4 h-4" />
@@ -319,8 +259,6 @@ export default function EventDashboard() {
                               className="inline-flex gap-2 items-center px-4 py-2 text-sm font-medium text-black rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
                               disabled
                               title="Download feature coming soon"
-                              disabled
-                              title="Download feature coming soon"
                             >
                               <ArrowDownTrayIcon className="w-4 h-4" />
                               <span className="hidden sm:inline">Download All</span>
@@ -329,11 +267,8 @@ export default function EventDashboard() {
                               onClick={() => handleDelete(event.id)}
                               disabled={deletingEventId === event.id}
                               className="inline-flex gap-2 items-center px-4 py-2 text-sm font-medium text-red-600 rounded-xl border border-red-200 transition-colors hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                              disabled={deletingEventId === event.id}
-                              className="inline-flex gap-2 items-center px-4 py-2 text-sm font-medium text-red-600 rounded-xl border border-red-200 transition-colors hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               <TrashIcon className="w-4 h-4" />
-                              <span className="hidden sm:inline">{deletingEventId === event.id ? 'Deleting...' : 'Delete'}</span>
                               <span className="hidden sm:inline">{deletingEventId === event.id ? 'Deleting...' : 'Delete'}</span>
                             </button>
                           </div>
@@ -345,7 +280,6 @@ export default function EventDashboard() {
                           <div className="flex flex-col gap-6 items-center sm:flex-row sm:items-start">
                             <div className="flex-shrink-0 p-4 bg-white rounded-xl border border-black/10">
                               <img 
-                                src={getQRCodeUrl(event)} 
                                 src={getQRCodeUrl(event)} 
                                 alt="Event QR Code" 
                                 className="w-32 h-32 sm:w-40 sm:h-40"
@@ -359,14 +293,12 @@ export default function EventDashboard() {
                               <div className="flex flex-col gap-3 sm:flex-row">
                                 <button
                                   onClick={() => handleCopyLink(event)}
-                                  onClick={() => handleCopyLink(event)}
                                   className="inline-flex gap-2 justify-center items-center px-4 py-2 text-sm font-medium text-white rounded-xl transition-colors bg-deep-green hover:bg-deep-green-dark"
                                 >
                                   <LinkIcon className="w-4 h-4" />
                                   Copy Event Link
                                 </button>
                                 <a
-                                  href={getQRCodeUrl(event)}
                                   href={getQRCodeUrl(event)}
                                   download={`${event.name}-qr-code.png`}
                                   className="inline-flex gap-2 justify-center items-center px-4 py-2 text-sm font-medium text-black rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"

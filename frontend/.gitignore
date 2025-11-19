@@ -25,3 +25,5 @@ dist-ssr
 
 junk
 
+# Local tracking file - should never be committed
+CHANGES.md

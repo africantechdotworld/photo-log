@@ -4,8 +4,6 @@ import { EnvelopeIcon, InformationCircleIcon, CheckCircleIcon } from '@heroicons
 import { sendEmailVerification, checkEmailVerification } from '../services/api';
 export default function VerifyEmail() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const navigate = useNavigate();
   const [email, setEmail] = useState(location.state?.email || 'user@example.com');
   const [resendCooldown, setResendCooldown] = useState(0);
   const [isChecking, setIsChecking] = useState(false);
