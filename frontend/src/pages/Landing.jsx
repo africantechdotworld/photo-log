@@ -200,6 +200,11 @@ export default function Landing() {
         </div>
       </section>
 
+
+
+
+
+
       {/* Key Features Section */}
       <section className="py-12 sm:py-16 lg:py-24 bg-deep-green">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -556,7 +561,7 @@ export default function Landing() {
             <p className="px-4 mx-auto max-w-2xl text-base sm:text-lg lg:text-xl text-black/70">
               Choose the plan that fits your event needs. All plans include instant QR codes and photo sharing.
             </p>
-          </div>
+          </div> */}
 
           <div className="grid gap-6 mx-auto max-w-6xl sm:grid-cols-2 lg:grid-cols-3 sm:gap-8 lg:gap-12">
             {/* Starter Plan */}
@@ -570,7 +575,7 @@ export default function Landing() {
                 <p className="text-sm leading-relaxed sm:text-base text-black/70">
                   Perfect for small events and personal celebrations
                 </p>
-              </div>
+              </div> */}
 
               <div className="mb-8 space-y-4 sm:space-y-6 sm:mb-10">
                 <div className="flex items-start space-x-3">
@@ -601,15 +606,15 @@ export default function Landing() {
                     <div className="text-xs sm:text-sm text-black/60">QR codes, moderation, download</div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <Link
+              {/* <Link
                 to="/signup"
                 className="block px-4 py-3 w-full text-sm font-semibold text-center text-white rounded-xl transition-colors sm:px-6 sm:py-4 bg-deep-green sm:text-base hover:bg-deep-green-dark"
               >
                 Get Started
               </Link>
-            </div>
+            </div> */}
 
             {/* Professional Plan - Featured */}
             <div className="relative p-6 bg-gradient-to-br rounded-2xl border-4 transform from-deep-green to-teal-brown sm:rounded-3xl sm:p-8 border-gold lg:-translate-y-4 lg:scale-105 sm:col-span-2 lg:col-span-1">
@@ -674,7 +679,7 @@ export default function Landing() {
               >
                 Get Started
               </Link>
-            </div>
+            </div> */}
 
             {/* Enterprise Plan */}
             <div className="relative p-6 bg-white rounded-2xl border-2 sm:rounded-3xl sm:p-8 border-black/5 sm:col-span-2 lg:col-span-1">
@@ -752,7 +757,7 @@ export default function Landing() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Final CTA Section */}
       <section className="overflow-hidden relative py-16 bg-gradient-to-br sm:py-24 lg:py-32 from-deep-green via-deep-green-dark to-deep-green">
