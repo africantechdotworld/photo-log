@@ -1,9 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { signIn, signInWithGoogle, sendEmailVerification } from '../services/api';
 
 export default function Signin() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -31,11 +33,11 @@ export default function Signin() {
         }
         // Redirect to verify email page
         navigate('/verify-email', { 
-          state: { email: response.user.email || formData.email } 
+          state: { email: response.user.email || formData.email, from } 
         });
       } else {
-        // Email is verified, proceed to home/dashboard
-        navigate('/');
+        // Email is verified, redirect to the page they were trying to access or dashboard
+        navigate(from);
       }
     } catch (err) {
       setError(err.message || 'Failed to sign in. Please try again.');
@@ -59,10 +61,10 @@ export default function Signin() {
           console.warn('Failed to send verification email:', verifyError);
         }
         navigate('/verify-email', { 
-          state: { email: response.user.email } 
+          state: { email: response.user.email, from } 
         });
       } else {
-        navigate('/');
+        navigate(from);
       }
     } catch (err) {
       setError(err.message || 'Failed to sign in with Google.');

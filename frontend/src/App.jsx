@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
 import Signup from './pages/Signup';
 import Signin from './pages/Signin';
@@ -14,22 +16,57 @@ import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/create-event" element={<CreateEvent />} />
-        <Route path="/dashboard" element={<EventDashboard />} />
-        <Route path="/host/event/:id" element={<HostGallery />} />
-        <Route path="/event/:id" element={<EventGallery />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        {/*<Route path="*" element={<NotFound />} />*/}
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Landing />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/event/:id" element={<EventGallery />} />
+          
+          {/* Protected routes - require authentication */}
+          <Route
+            path="/create-event"
+            element={
+              <ProtectedRoute>
+                <CreateEvent />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <EventDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/host/event/:id"
+            element={
+              <ProtectedRoute>
+                <HostGallery />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Admin routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          {/*<Route path="*" element={<NotFound />} />*/}
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
