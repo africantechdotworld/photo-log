@@ -316,3 +316,101 @@ export async function bulkDeletePhotos(eventId, photoIds) {
     body: JSON.stringify({ photo_ids: photoIds }),
   });
 }
+
+/**
+ * Public API call (no authentication required)
+ * @param {string} endpoint - API endpoint (e.g., '/public/events/{slug}')
+ * @param {object} options - Fetch options (method, body, headers, etc.)
+ * @returns {Promise<object>} - Parsed JSON response
+ */
+async function publicApiCall(endpoint, options = {}) {
+  const headers = {
+    ...options.headers,
+  };
+  
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || `API error: ${response.status}`);
+  }
+  
+  return response.json();
+}
+
+/**
+ * Get public event information
+ * @param {string} slug - Event ID (used as slug)
+ * @returns {Promise<object>} - Public event data
+ */
+export async function getPublicEvent(slug) {
+  return publicApiCall(`/public/events/${slug}`);
+}
+
+/**
+ * Get approved photos for a public event
+ * @param {string} slug - Event ID (used as slug)
+ * @param {number} page - Page number (default: 1)
+ * @param {number} pageSize - Items per page (default: 20)
+ * @returns {Promise<object>} - Photos list with pagination info
+ */
+export async function getPublicEventPhotos(slug, page = 1, pageSize = 20) {
+  return publicApiCall(`/public/events/${slug}/photos?page=${page}&page_size=${pageSize}`);
+}
+
+/**
+ * Verify event password
+ * @param {string} slug - Event ID (used as slug)
+ * @param {string} password - Event password
+ * @returns {Promise<object>} - Success message
+ */
+export async function verifyEventPassword(slug, password) {
+  const formData = new FormData();
+  formData.append('password', password);
+  
+  const response = await fetch(`${API_BASE_URL}/public/events/${slug}/verify-password`, {
+    method: 'POST',
+    body: formData,
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || `API error: ${response.status}`);
+  }
+  
+  return response.json();
+}
+
+/**
+ * Upload photo to a public event
+ * @param {string} slug - Event ID (used as slug)
+ * @param {File} file - Image file
+ * @param {string} caption - Optional caption
+ * @param {string} password - Optional event password
+ * @returns {Promise<object>} - Uploaded photo data
+ */
+export async function uploadPublicPhoto(slug, file, caption = null, password = null) {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (caption) {
+    formData.append('caption', caption);
+  }
+  if (password) {
+    formData.append('password', password);
+  }
+  
+  const response = await fetch(`${API_BASE_URL}/public/events/${slug}/photos`, {
+    method: 'POST',
+    body: formData,
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || `API error: ${response.status}`);
+  }
+  
+  return response.json();
+}
