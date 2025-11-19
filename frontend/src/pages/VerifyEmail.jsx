@@ -2,9 +2,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { EnvelopeIcon, InformationCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { sendEmailVerification, checkEmailVerification } from '../services/api';
+
 export default function VerifyEmail() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [email, setEmail] = useState(location.state?.email || 'user@example.com');
+  const from = location.state?.from || '/';
   const [resendCooldown, setResendCooldown] = useState(0);
   const [isChecking, setIsChecking] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
@@ -40,8 +43,8 @@ export default function VerifyEmail() {
     try {
       const isVerified = await checkEmailVerification();
       if (isVerified) {
-        // Email is verified, redirect to home
-        navigate('/');
+        // Email is verified, redirect to the page they were trying to access or home
+        navigate(from);
       } else {
         setError('Email is not yet verified. Please click the link in your email.');
       }
