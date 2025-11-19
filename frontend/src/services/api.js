@@ -154,6 +154,22 @@ export async function sendEmailVerification(email) {
     console.warn("Failed to notify backend of verification email:", error);
   }
 }
+
+/**
+ * Check if email is verified
+ * Reloads the current user to get the latest verification status
+ * @returns {Promise<boolean>} - True if email is verified, false otherwise
+ */
+export async function checkEmailVerification() {
+  if (!auth.currentUser) {
+    throw new Error("No user is currently signed in");
+  }
+  
+  // Reload user to get latest verification status
+  await auth.currentUser.reload();
+  
+  return auth.currentUser.emailVerified;
+}
 /**
  * Check if email is verified
  * Reloads the current user to get the latest verification status
@@ -193,6 +209,124 @@ export async function getCurrentToken() {
  */
 export function getCurrentUser() {
   return auth.currentUser;
+}
+
+/**
+ * Get list of events for the current user
+ * @param {number} page - Page number (default: 1)
+ * @param {number} pageSize - Items per page (default: 100)
+ * @returns {Promise<object>} - Events list with pagination info
+ */
+export async function getEvents(page = 1, pageSize = 100) {
+  return apiCall(`/events?page=${page}&page_size=${pageSize}`);
+}
+
+/**
+ * Get event details by ID
+ * @param {string} eventId - Event ID
+ * @returns {Promise<object>} - Event details
+ */
+export async function getEvent(eventId) {
+  return apiCall(`/events/${eventId}`);
+}
+
+/**
+ * Delete an event
+ * @param {string} eventId - Event ID
+ * @returns {Promise<object>} - Success message
+ */
+export async function deleteEvent(eventId) {
+  return apiCall(`/events/${eventId}`, {
+    method: 'DELETE',
+  });
+}
+
+/**
+ * Get QR code for an event
+ * @param {string} eventId - Event ID
+ * @returns {Promise<object>} - QR code data
+ */
+export async function getEventQRCode(eventId) {
+  return apiCall(`/events/${eventId}/qr`);
+}
+
+/**
+ * Create a new event
+ * @param {object} eventData - Event data (name, description, date, password)
+ * @returns {Promise<object>} - Created event
+ */
+export async function createEvent(eventData) {
+  return apiCall('/events', {
+    method: 'POST',
+    body: JSON.stringify(eventData),
+  });
+}
+
+/**
+ * Upload cover image for an event
+ * @param {string} eventId - Event ID
+ * @param {File} file - Image file
+ * @returns {Promise<object>} - Updated event with cover image URLs
+ */
+export async function uploadEventCover(eventId, file) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  // Get the current user's ID token if authenticated
+  const headers = {};
+  if (auth.currentUser) {
+    const idToken = await auth.currentUser.getIdToken();
+    headers['Authorization'] = `Bearer ${idToken}`;
+  }
+
+  const response = await fetch(`${API_BASE_URL}/events/${eventId}/cover`, {
+    method: 'POST',
+    headers,
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || `API error: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Get photos for an event
+ * @param {string} eventId - Event ID
+ * @param {number} page - Page number (default: 1)
+ * @param {number} pageSize - Items per page (default: 100)
+ * @returns {Promise<object>} - Photos list with pagination info
+ */
+export async function getEventPhotos(eventId, page = 1, pageSize = 100) {
+  return apiCall(`/events/${eventId}/photos?page=${page}&page_size=${pageSize}`);
+}
+
+/**
+ * Delete a single photo
+ * @param {string} eventId - Event ID
+ * @param {string} photoId - Photo ID
+ * @returns {Promise<object>} - Success message
+ */
+export async function deletePhoto(eventId, photoId) {
+  return apiCall(`/events/${eventId}/photos/${photoId}`, {
+    method: 'DELETE',
+  });
+}
+
+/**
+ * Bulk delete photos
+ * @param {string} eventId - Event ID
+ * @param {string[]} photoIds - Array of photo IDs
+ * @returns {Promise<object>} - Success message
+ */
+export async function bulkDeletePhotos(eventId, photoIds) {
+  return apiCall(`/events/${eventId}/photos/bulk-delete`, {
+    method: 'POST',
+    body: JSON.stringify({ photo_ids: photoIds }),
+  });
 }
 /**
  * Get list of events for the current user

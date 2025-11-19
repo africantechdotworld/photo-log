@@ -5,6 +5,7 @@ import { sendEmailVerification, checkEmailVerification } from '../services/api';
 export default function VerifyEmail() {
   const location = useLocation();
   const navigate = useNavigate();
+  const navigate = useNavigate();
   const [email, setEmail] = useState(location.state?.email || 'user@example.com');
   const [resendCooldown, setResendCooldown] = useState(0);
   const [isChecking, setIsChecking] = useState(false);
@@ -17,10 +18,13 @@ export default function VerifyEmail() {
       return () => clearTimeout(timer);
     }
   }, [resendCooldown]);
+
   const handleResend = async () => {
     if (resendCooldown > 0) return;
+    
     setError('');
     setResendSuccess(false);
+    
     try {
       await sendEmailVerification(email);
       setResendSuccess(true);
@@ -30,9 +34,11 @@ export default function VerifyEmail() {
       setError(err.message || 'Failed to send verification email. Please try again.');
     }
   };
+
   const handleCheckVerification = async () => {
     setIsChecking(true);
     setError('');
+    
     try {
       const isVerified = await checkEmailVerification();
       if (isVerified) {
@@ -47,6 +53,7 @@ export default function VerifyEmail() {
       setIsChecking(false);
     }
   };
+
   return (
     <div className="min-h-screen bg-deep-green">
       <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-12">
@@ -83,6 +90,7 @@ export default function VerifyEmail() {
                   {email}
                 </p>
               </div>
+
               {/* Success Message */}
               {resendSuccess && (
                 <div className="p-4 mb-6 rounded-xl border bg-emerald/10 border-emerald/30">
@@ -94,12 +102,14 @@ export default function VerifyEmail() {
                   </div>
                 </div>
               )}
+
               {/* Error Message */}
               {error && (
-                <div className="p-4 mb-6 rounded-xl border bg-red-50 border-red-200">
+                <div className="p-4 mb-6 bg-red-50 rounded-xl border border-red-200">
                   <p className="text-sm text-red-700">{error}</p>
                 </div>
               )}
+
               {/* Instructions */}
               <div className="p-4 mb-6 rounded-xl border bg-emerald/5 border-emerald/20">
                 <div className="flex items-start space-x-3">
@@ -114,15 +124,17 @@ export default function VerifyEmail() {
                   </div>
                 </div>
               </div>
+
               {/* Check Verification Button */}
               <button
                 type="button"
                 onClick={handleCheckVerification}
                 disabled={isChecking}
-                className="px-6 py-3 w-full mb-4 text-base font-semibold text-white rounded-xl transition-colors sm:py-4 bg-deep-green sm:text-lg hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 mb-4 w-full text-base font-semibold text-white rounded-xl transition-colors sm:py-4 bg-deep-green sm:text-lg hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isChecking ? 'Checking...' : "I've verified my email"}
               </button>
+
               {/* Resend Email */}
               <div className="mt-6 text-center sm:mt-8">
                 <p className="mb-4 text-sm text-black/60 sm:text-base">
@@ -139,6 +151,7 @@ export default function VerifyEmail() {
                     : 'Resend verification email'}
                 </button>
               </div>
+
               {/* Help Text */}
               <div className="p-4 mt-6 rounded-xl border bg-emerald/5 border-emerald/20">
                 <div className="flex items-start space-x-3">
