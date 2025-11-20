@@ -7,7 +7,14 @@ export default function VerifyEmail() {
   const location = useLocation();
   const navigate = useNavigate();
   const [email, setEmail] = useState(location.state?.email || 'user@example.com');
-  const from = location.state?.from || '/';
+  
+  // Get the redirect path - handle both location object and string
+  const getRedirectPath = () => {
+    const from = location.state?.from;
+    if (!from) return '/dashboard';
+    // If from is a location object, use pathname; otherwise use the string directly
+    return typeof from === 'string' ? from : (from.pathname || '/dashboard');
+  };
   const [resendCooldown, setResendCooldown] = useState(0);
   const [isChecking, setIsChecking] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
@@ -43,8 +50,11 @@ export default function VerifyEmail() {
     try {
       const isVerified = await checkEmailVerification();
       if (isVerified) {
-        // Email is verified, redirect to the page they were trying to access or home
-        navigate(from);
+        // Email is verified, wait a moment for auth context to update
+        await new Promise(resolve => setTimeout(resolve, 500));
+        // Redirect to the page they were trying to access or dashboard
+        const redirectPath = getRedirectPath();
+        navigate(redirectPath);
       } else {
         setError('Email is not yet verified. Please click the link in your email.');
       }
