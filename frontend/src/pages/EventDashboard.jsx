@@ -190,12 +190,18 @@ export default function EventDashboard() {
                       <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
                         {/* Event Cover Photo */}
                         <div className="flex-shrink-0">
-                          <div className="overflow-hidden relative w-full h-32 rounded-xl lg:w-48 sm:h-40 lg:h-48">
-                            <img
-                              src={event.cover_thumbnail_url || event.cover_image_url || "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"}
-                              alt={event.name}
-                              className="object-cover w-full h-full"
-                            />
+                          <div className="overflow-hidden relative w-full h-32 rounded-xl lg:w-48 sm:h-40 lg:h-48 bg-black/5">
+                            {event.cover_thumbnail_url || event.cover_image_url ? (
+                              <img
+                                src={event.cover_thumbnail_url || event.cover_image_url}
+                                alt={event.name}
+                                className="object-cover w-full h-full"
+                              />
+                            ) : (
+                              <div className="flex justify-center items-center w-full h-full">
+                                <PhotoIcon className="w-12 h-12 text-black/20 sm:w-16 sm:h-16" />
+                              </div>
+                            )}
                             {!event.is_active && (
                               <div className="flex absolute inset-0 justify-center items-center bg-black/40">
                                 <span className="px-3 py-1 text-xs font-medium text-white rounded-full bg-black/60">
