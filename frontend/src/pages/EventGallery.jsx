@@ -344,7 +344,8 @@ export default function EventGallery() {
                     <CheckCircleIcon className="w-12 h-12 sm:h-14 sm:w-14" />
                   </div>
                   <h3 className="mb-2 text-xl font-bold text-black sm:text-2xl">Upload Successful!</h3>
-                  <p className="text-black/70 sm:text-lg">Thank you for sharing your photos. They will appear in the gallery shortly.</p>
+                  <p className="mb-2 text-black/70 sm:text-lg">Thank you for sharing your photos.</p>
+                  <p className="text-sm text-black/60 sm:text-base">Your photos are pending approval and will appear in the gallery once approved by the event host.</p>
                 </div>
               ) : (
                 /* Upload Form */
