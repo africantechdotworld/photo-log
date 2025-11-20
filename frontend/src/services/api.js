@@ -85,8 +85,6 @@ export async function signIn(email, password) {
   const idToken = await userCredential.user.getIdToken();
   // Call backend signin endpoint (creates user in DB if missing)
   const signinUrl = `${API_BASE_URL}/auth/signin`;
-
-  console.log("Firebase ID Token being sent:", idToken);
   const response = await fetch(signinUrl, {
     method: "POST",
     headers: {
