@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   PhotoIcon,
@@ -27,21 +27,24 @@ export default function EventGallery() {
   const [viewingPhoto, setViewingPhoto] = useState(null);
   const [dragActive, setDragActive] = useState(false);
 
-  useEffect(() => {
-    if (id) {
-      fetchEventData();
+  const fetchEventData = useCallback(async () => {
+    if (!id || id === ':id') {
+      setLoading(false);
+      setError('Invalid event ID');
+      return;
     }
-  }, [id]);
 
-  const fetchEventData = async () => {
     try {
       setLoading(true);
       setError('');
       
+      // Decode URL-encoded id if needed
+      const eventId = decodeURIComponent(id);
+      
       // Fetch event and photos in parallel
       const [eventData, photosData] = await Promise.all([
-        getPublicEvent(id),
-        getPublicEventPhotos(id, 1, 100)
+        getPublicEvent(eventId),
+        getPublicEventPhotos(eventId, 1, 100)
       ]);
       
       setEvent(eventData);
@@ -52,7 +55,11 @@ export default function EventGallery() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchEventData();
+  }, [fetchEventData]);
 
   const handleDrag = (e) => {
     e.preventDefault();
