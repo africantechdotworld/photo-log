@@ -135,6 +135,39 @@ export async function signInWithGoogle() {
 export async function signOut() {
   await auth.signOut();
 }
+
+/**
+ * Admin sign in
+ * Verifies Firebase token and checks if user has admin privileges
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<object>} - User data from backend
+ */
+export async function adminSignIn(email, password) {
+  const { signInWithEmailAndPassword } = await import("firebase/auth");
+  
+  // Sign in with Firebase
+  const userCredential = await signInWithEmailAndPassword(auth, email, password);
+  const idToken = await userCredential.user.getIdToken();
+  
+  // Verify admin access with backend
+  const response = await fetch(`${API_BASE_URL}/admin/auth/signin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ token: idToken }),
+  });
+  
+  if (!response.ok) {
+    // Sign out from Firebase if backend rejects
+    await auth.signOut();
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.detail || `Admin access denied: ${response.status}`);
+  }
+  
+  return response.json();
+}
 /**
  * Send password reset email
  * @param {string} email
