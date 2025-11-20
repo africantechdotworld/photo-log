@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   PlusIcon, 
   QrCodeIcon, 
@@ -10,14 +10,26 @@ import {
   LinkIcon
 } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
-import { getEvents, deleteEvent } from '../services/api';
+import { getEvents, deleteEvent, signOut } from '../services/api';
 
 export default function EventDashboard() {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showQrCode, setShowQrCode] = useState(null);
   const [deletingEventId, setDeletingEventId] = useState(null);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate('/signin');
+    } catch (err) {
+      console.error('Error signing out:', err);
+      // Still navigate to signin even if signOut fails
+      navigate('/signin');
+    }
+  };
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -92,12 +104,12 @@ export default function EventDashboard() {
                 >
                   <PlusIcon className="w-5 h-5" />
                 </Link>
-                <Link
-                  to="/signin"
+                <button
+                  onClick={handleLogout}
                   className="px-2 text-xs font-medium text-black whitespace-nowrap transition-colors sm:text-sm lg:text-base hover:text-deep-green sm:px-0"
                 >
                   Logout
-                </Link>
+                </button>
               </div>
             </div>
           </nav>
