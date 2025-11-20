@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   PlusIcon, 
   QrCodeIcon, 
@@ -10,13 +10,26 @@ import {
   LinkIcon
 } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
-import { getEvents, deleteEvent } from '../services/api';
+import { getEvents, deleteEvent, signOut } from '../services/api';
+
 export default function EventDashboard() {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showQrCode, setShowQrCode] = useState(null);
   const [deletingEventId, setDeletingEventId] = useState(null);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate('/signin');
+    } catch (err) {
+      console.error('Error signing out:', err);
+      // Still navigate to signin even if signOut fails
+      navigate('/signin');
+    }
+  };
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -57,12 +70,15 @@ export default function EventDashboard() {
     navigator.clipboard.writeText(link);
     // You could add a toast notification here
   };
+  
   const getQRCodeUrl = (event) => {
     const link = event.share_link || `${window.location.origin}/event/${event.id}`;
     return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link)}`;
   };
+
   const totalPhotos = events.reduce((sum, event) => sum + (event.photo_count || 0), 0);
   const totalViews = 0; // View count not available in current API response
+
   return (
     <div className="min-h-screen bg-deep-green">
       <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-12">
@@ -88,12 +104,12 @@ export default function EventDashboard() {
                 >
                   <PlusIcon className="w-5 h-5" />
                 </Link>
-                <Link
-                  to="/signin"
+                <button
+                  onClick={handleLogout}
                   className="px-2 text-xs font-medium text-black whitespace-nowrap transition-colors sm:text-sm lg:text-base hover:text-deep-green sm:px-0"
                 >
                   Logout
-                </Link>
+                </button>
               </div>
             </div>
           </nav>
@@ -151,7 +167,7 @@ export default function EventDashboard() {
             </div>
             {/* Error Message */}
             {error && (
-              <div className="p-4 mb-6 rounded-xl border bg-red-50 border-red-200">
+              <div className="p-4 mb-6 bg-red-50 rounded-xl border border-red-200">
                 <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
@@ -186,12 +202,18 @@ export default function EventDashboard() {
                       <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
                         {/* Event Cover Photo */}
                         <div className="flex-shrink-0">
-                          <div className="overflow-hidden relative w-full h-32 rounded-xl lg:w-48 sm:h-40 lg:h-48">
-                            <img
-                              src={event.cover_thumbnail_url || event.cover_image_url || "https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"}
-                              alt={event.name}
-                              className="object-cover w-full h-full"
-                            />
+                          <div className="overflow-hidden relative w-full h-32 rounded-xl lg:w-48 sm:h-40 lg:h-48 bg-black/5">
+                            {event.cover_thumbnail_url || event.cover_image_url ? (
+                              <img
+                                src={event.cover_thumbnail_url || event.cover_image_url}
+                                alt={event.name}
+                                className="object-cover w-full h-full"
+                              />
+                            ) : (
+                              <div className="flex justify-center items-center w-full h-full">
+                                <PhotoIcon className="w-12 h-12 text-black/20 sm:w-16 sm:h-16" />
+                              </div>
+                            )}
                             {!event.is_active && (
                               <div className="flex absolute inset-0 justify-center items-center bg-black/40">
                                 <span className="px-3 py-1 text-xs font-medium text-white rounded-full bg-black/60">

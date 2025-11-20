@@ -1,7 +1,35 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Landing() {
+  const { isAuthenticated, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate]);
+
+  // Show loading state while checking auth
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-deep-green">
+        <div className="text-center">
+          <div className="inline-block w-8 h-8 rounded-full border-4 border-solid animate-spin border-cream border-r-transparent"></div>
+          <p className="mt-4 text-cream">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render landing page if authenticated (redirect will happen)
+  if (isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-deep-green">
       {/* Hero Section with Cream Content Area */}

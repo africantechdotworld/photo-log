@@ -45,10 +45,12 @@ export default function CreateEvent() {
     setPreviewUrl(null);
     setFormData(prev => ({ ...prev, coverPhoto: null }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
+
     try {
       // Prepare event data for API
       const eventData = {
@@ -57,8 +59,10 @@ export default function CreateEvent() {
         date: new Date(formData.date).toISOString(), // Convert date to ISO datetime
         password: formData.usePassword && formData.password ? formData.password : null,
       };
+
       // Create the event
       let newEvent = await createEvent(eventData);
+      
       // Upload cover photo if provided
       if (formData.coverPhoto) {
         try {
@@ -70,6 +74,7 @@ export default function CreateEvent() {
           // Event is already created, continue with event without cover
         }
       }
+
       setCreatedEvent(newEvent);
       setSubmitted(true);
     } catch (err) {
@@ -79,29 +84,33 @@ export default function CreateEvent() {
       setLoading(false);
     }
   };
+
   const getEventLink = (event) => {
     return event.share_link || `${window.location.origin}/event/${event.id}`;
   };
+
   const getQRCodeUrl = (event) => {
     const link = getEventLink(event);
     return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(link)}`;
   };
+
   if (submitted && createdEvent) {
     const eventLink = getEventLink(createdEvent);
     const qrCodeUrl = getQRCodeUrl(createdEvent);
+
     return (
       <div className="min-h-screen bg-deep-green">
         <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-12">
           <div className="overflow-hidden rounded-2xl bg-cream sm:rounded-3xl">
             {/* Header Navigation */}
-            <nav className="px-4 py-3 sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-b border-cream-dark/20">
-              <div className="flex justify-between items-center gap-2 sm:gap-4">
-                <Link to="/" className="text-lg sm:text-xl lg:text-2xl font-bold text-black flex-shrink-0">
+            <nav className="px-4 py-3 border-b sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-cream-dark/20">
+              <div className="flex gap-2 justify-between items-center sm:gap-4">
+                <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
                   PhotoLog
                 </Link>
                 <Link
                   to="/dashboard"
-                  className="text-xs sm:text-sm lg:text-base font-medium text-black transition-colors hover:text-deep-green whitespace-nowrap px-2 sm:px-0"
+                  className="px-2 text-xs font-medium text-black whitespace-nowrap transition-colors sm:text-sm lg:text-base hover:text-deep-green sm:px-0"
                 >
                   Go to Dashboard
                 </Link>
@@ -120,9 +129,9 @@ export default function CreateEvent() {
                   Your event "{createdEvent.name}" is ready. Share the QR code or link with your guests to start collecting photos.
                 </p>
                 {/* QR Code and Link Section */}
-                <div className="grid gap-8 sm:grid-cols-2 mb-8 sm:mb-10">
+                <div className="grid gap-8 mb-8 sm:grid-cols-2 sm:mb-10">
                   {/* QR Code */}
-                  <div className="p-6 rounded-2xl bg-white border-2 border-black/5">
+                  <div className="p-6 bg-white rounded-2xl border-2 border-black/5">
                     <h3 className="mb-4 text-lg font-semibold text-black">QR Code</h3>
                     <div className="flex justify-center mb-4">
                       <div className="p-4 bg-white rounded-xl border border-black/10">
@@ -133,7 +142,7 @@ export default function CreateEvent() {
                             className="w-48 h-48 sm:w-56 sm:h-56"
                           />
                         ) : (
-                          <div className="w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center bg-gray-100 rounded-xl">
+                          <div className="flex justify-center items-center w-48 h-48 bg-gray-100 rounded-xl sm:w-56 sm:h-56">
                             <QrCodeIcon className="w-24 h-24 text-gray-400" />
                           </div>
                         )}
@@ -142,24 +151,24 @@ export default function CreateEvent() {
                     <p className="text-sm text-black/60">Display at your venue for easy scanning</p>
                   </div>
                   {/* Event Link */}
-                  <div className="p-6 rounded-2xl bg-white border-2 border-black/5">
+                  <div className="p-6 bg-white rounded-2xl border-2 border-black/5">
                     <h3 className="mb-4 text-lg font-semibold text-black">Shareable Link</h3>
-                    <div className="mb-4 p-4 rounded-xl bg-cream border border-black/10 break-all">
-                      <p className="text-sm sm:text-base text-black/70 font-mono">{eventLink}</p>
+                    <div className="p-4 mb-4 break-all rounded-xl border bg-cream border-black/10">
+                      <p className="font-mono text-sm sm:text-base text-black/70">{eventLink}</p>
                     </div>
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(eventLink);
                         // You could add a toast notification here
                       }}
-                      className="w-full px-4 py-2 text-sm font-medium text-white rounded-xl transition-colors bg-deep-green hover:bg-deep-green-dark"
+                      className="px-4 py-2 w-full text-sm font-medium text-white rounded-xl transition-colors bg-deep-green hover:bg-deep-green-dark"
                     >
                       Copy Link
                     </button>
                   </div>
                 </div>
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="flex flex-col gap-4 justify-center sm:flex-row">
                   <Link
                     to="/dashboard"
                     className="px-6 py-3 text-base font-semibold text-white rounded-xl transition-colors sm:py-4 bg-deep-green sm:text-lg hover:bg-deep-green-dark focus:outline-none focus:ring-2 focus:ring-deep-green focus:ring-offset-2"
@@ -181,7 +190,7 @@ export default function CreateEvent() {
                       setPreviewUrl(null);
                       setError('');
                     }}
-                    className="px-6 py-3 text-base font-semibold text-black rounded-xl transition-colors sm:py-4 border-2 border-black/10 sm:text-lg hover:bg-cream-dark"
+                    className="px-6 py-3 text-base font-semibold text-black rounded-xl border-2 transition-colors sm:py-4 border-black/10 sm:text-lg hover:bg-cream-dark"
                   >
                     Create Another Event
                   </button>
@@ -198,14 +207,14 @@ export default function CreateEvent() {
       <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-12">
         <div className="overflow-hidden rounded-2xl bg-cream sm:rounded-3xl">
           {/* Header Navigation */}
-          <nav className="px-4 py-3 sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-b border-cream-dark/20">
-            <div className="flex justify-between items-center gap-2 sm:gap-4">
-              <Link to="/" className="text-lg sm:text-xl lg:text-2xl font-bold text-black flex-shrink-0">
+          <nav className="px-4 py-3 border-b sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-cream-dark/20">
+            <div className="flex gap-2 justify-between items-center sm:gap-4">
+              <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
                 PhotoLog
               </Link>
               <Link
                 to="/dashboard"
-                className="text-xs sm:text-sm lg:text-base font-medium text-black transition-colors hover:text-deep-green whitespace-nowrap px-2 sm:px-0"
+                className="px-2 text-xs font-medium text-black whitespace-nowrap transition-colors sm:text-sm lg:text-base hover:text-deep-green sm:px-0"
               >
                 Dashboard
               </Link>
@@ -223,12 +232,14 @@ export default function CreateEvent() {
                   Set up your event and get a unique QR code for photo sharing
                 </p>
               </div>
+
               {/* Error Message */}
               {error && (
-                <div className="p-4 mb-6 rounded-xl border bg-red-50 border-red-200">
+                <div className="p-4 mb-6 bg-red-50 rounded-xl border border-red-200">
                   <p className="text-sm text-red-700">{error}</p>
                 </div>
               )}
+
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
                 {/* Event Name */}
@@ -269,7 +280,7 @@ export default function CreateEvent() {
                     Event Date <span className="text-deep-green">*</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                    <div className="flex absolute inset-y-0 left-0 items-center pl-4 pointer-events-none">
                       <CalendarIcon className="w-5 h-5 text-black/40" />
                     </div>
                     <input
@@ -279,7 +290,7 @@ export default function CreateEvent() {
                       required
                       value={formData.date}
                       onChange={handleChange}
-                      className="px-4 py-3 w-full pl-12 text-black bg-white rounded-xl border transition-all border-black/10 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-transparent"
+                      className="px-4 py-3 pl-12 w-full text-black bg-white rounded-xl border transition-all border-black/10 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -290,24 +301,24 @@ export default function CreateEvent() {
                   </label>
                   <div className="mt-2">
                     {previewUrl ? (
-                      <div className="relative rounded-xl overflow-hidden">
+                      <div className="overflow-hidden relative rounded-xl">
                         <img
                           src={previewUrl}
                           alt="Cover preview"
-                          className="w-full h-48 sm:h-64 object-cover rounded-xl border-2 border-black/10"
+                          className="object-cover w-full h-48 rounded-xl border-2 sm:h-64 border-black/10"
                         />
                         <button
                           type="button"
                           onClick={handleRemovePhoto}
-                          className="absolute top-3 right-3 px-3 py-2 text-sm font-medium text-white rounded-lg transition-colors bg-red-600 hover:bg-red-700"
+                          className="absolute top-3 right-3 px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg transition-colors hover:bg-red-700"
                         >
                           Remove
                         </button>
                       </div>
                     ) : (
-                      <label className="flex flex-col items-center justify-center w-full h-48 sm:h-64 border-2 border-dashed rounded-xl border-black/20 cursor-pointer hover:border-deep-green transition-colors bg-white/50">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <PhotoIcon className="w-10 h-10 sm:w-12 sm:h-12 text-black/40 mb-3" />
+                      <label className="flex flex-col justify-center items-center w-full h-48 rounded-xl border-2 border-dashed transition-colors cursor-pointer sm:h-64 border-black/20 hover:border-deep-green bg-white/50">
+                        <div className="flex flex-col justify-center items-center pt-5 pb-6">
+                          <PhotoIcon className="mb-3 w-10 h-10 sm:w-12 sm:h-12 text-black/40" />
                           <p className="mb-2 text-sm sm:text-base text-black/70">
                             <span className="font-semibold">Click to upload</span> or drag and drop
                           </p>
@@ -346,7 +357,7 @@ export default function CreateEvent() {
                       Event Password
                     </label>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                      <div className="flex absolute inset-y-0 left-0 items-center pl-4 pointer-events-none">
                         <LockClosedIcon className="w-5 h-5 text-black/40" />
                       </div>
                       <input
@@ -356,17 +367,17 @@ export default function CreateEvent() {
                         value={formData.password}
                         onChange={handleChange}
                         placeholder="Enter password for guests"
-                        className="px-4 py-3 w-full pl-12 text-black bg-white rounded-xl border transition-all border-black/10 placeholder-black/40 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-transparent"
+                        className="px-4 py-3 pl-12 w-full text-black bg-white rounded-xl border transition-all border-black/10 placeholder-black/40 focus:outline-none focus:ring-2 focus:ring-deep-green focus:border-transparent"
                       />
                     </div>
                     <p className="mt-2 text-xs sm:text-sm text-black/50">Guests will need this password to upload photos</p>
                   </div>
                 )}
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                <div className="flex flex-col gap-4 pt-6 sm:flex-row">
                   <Link
                     to="/dashboard"
-                    className="flex-1 px-6 py-3 text-base font-semibold text-black rounded-xl transition-colors text-center border-2 border-black/10 sm:text-lg hover:bg-cream-dark"
+                    className="flex-1 px-6 py-3 text-base font-semibold text-center text-black rounded-xl border-2 transition-colors border-black/10 sm:text-lg hover:bg-cream-dark"
                   >
                     Cancel
                   </Link>
@@ -380,7 +391,7 @@ export default function CreateEvent() {
                 </div>
               </form>
               {/* Info Box */}
-              <div className="mt-8 p-6 rounded-xl bg-emerald/5 border border-emerald/20">
+              <div className="p-6 mt-8 rounded-xl border bg-emerald/5 border-emerald/20">
                 <h3 className="mb-4 text-lg font-semibold text-black">What happens next?</h3>
                 <ul className="space-y-3 text-sm sm:text-base text-black/70">
                   <li className="flex items-start">

@@ -6,6 +6,7 @@ import {
   LockClosedIcon, 
   ShieldCheckIcon 
 } from '@heroicons/react/24/outline';
+import { adminSignIn } from '../services/api';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -14,13 +15,24 @@ export default function AdminLogin() {
     password: '',
     rememberMe: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Admin login submitted', formData);
-    // In real app, handle authentication here
-    // For now, navigate to dashboard on submit
-    navigate('/admin/dashboard');
+    setError('');
+    setLoading(true);
+
+    try {
+      await adminSignIn(formData.email, formData.password);
+      // Navigate to admin dashboard on success
+      navigate('/admin/dashboard');
+    } catch (err) {
+      setError(err.message || 'Failed to sign in. Please check your credentials and admin access.');
+      console.error('Admin login error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -73,6 +85,13 @@ export default function AdminLogin() {
 
               {/* Login Form */}
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Error Message */}
+                {error && (
+                  <div className="p-4 rounded-xl border bg-red-50 border-red-200">
+                    <p className="text-sm text-red-700">{error}</p>
+                  </div>
+                )}
+
                 {/* Email Field */}
                 <div>
                   <label htmlFor="email" className="block mb-2 text-sm font-semibold text-black sm:text-base">
@@ -137,9 +156,10 @@ export default function AdminLogin() {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full rounded-xl bg-deep-green py-3 px-4 font-medium text-white transition-colors hover:bg-deep-green-dark sm:py-3.5 sm:px-6 sm:text-base"
+                  disabled={loading}
+                  className="w-full rounded-xl bg-deep-green py-3 px-4 font-medium text-white transition-colors hover:bg-deep-green-dark disabled:opacity-50 disabled:cursor-not-allowed sm:py-3.5 sm:px-6 sm:text-base"
                 >
-                  Access Admin Dashboard
+                  {loading ? 'Signing In...' : 'Access Admin Dashboard'}
                 </button>
               </form>
 
