@@ -12,7 +12,7 @@ import {
   CalendarIcon,
   EyeIcon
 } from '@heroicons/react/24/outline';
-import { getEvent, getEventPhotos, deletePhoto, bulkDeletePhotos, deleteEvent } from '../services/api';
+import { getEvent, getEventPhotos, deletePhoto, bulkDeletePhotos, deleteEvent, updatePhoto } from '../services/api';
 
 export default function HostGallery() {
   const { id } = useParams();
@@ -59,6 +59,36 @@ export default function HostGallery() {
         ? prev.filter(pid => pid !== photoId)
         : [...prev, photoId]
     );
+  };
+
+  const handleApprovePhoto = async (photoId, approved) => {
+    try {
+      const updatedPhoto = await updatePhoto(id, photoId, { approved });
+      // Update photo in local state
+      setPhotos(photos.map(p => p.id === photoId ? updatedPhoto : p));
+    } catch (err) {
+      alert(err.message || 'Failed to update photo approval status. Please try again.');
+      console.error('Error updating photo:', err);
+    }
+  };
+
+  const handleBulkApprove = async (approved) => {
+    if (selectedPhotos.length === 0) return;
+    
+    try {
+      // Update all selected photos in parallel
+      await Promise.all(
+        selectedPhotos.map(photoId => 
+          updatePhoto(id, photoId, { approved })
+        )
+      );
+      // Refresh photos to get updated data
+      await fetchEventData();
+      setSelectedPhotos([]);
+    } catch (err) {
+      alert(err.message || 'Failed to update photos. Please try again.');
+      console.error('Error bulk updating photos:', err);
+    }
   };
 
   const handleDeleteSelected = async () => {
@@ -311,6 +341,20 @@ export default function HostGallery() {
                 </div>
                 <div className="flex items-center gap-3">
                   <button
+                    onClick={() => handleBulkApprove(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-xl transition-colors bg-emerald hover:bg-emerald-dark"
+                  >
+                    <CheckIcon className="w-4 h-4" />
+                    <span>Approve</span>
+                  </button>
+                  <button
+                    onClick={() => handleBulkApprove(false)}
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-xl transition-colors bg-white/10 hover:bg-white/20"
+                  >
+                    <XMarkIcon className="w-4 h-4" />
+                    <span>Unapprove</span>
+                  </button>
+                  <button
                     onClick={handleDownloadSelected}
                     className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-xl transition-colors bg-white/10 hover:bg-white/20"
                   >
@@ -400,7 +444,7 @@ export default function HostGallery() {
                       
                       {/* Selection Checkbox */}
                       <div
-                        className="absolute top-2 left-2 z-10"
+                        className="absolute bottom-2 left-2 z-10"
                         onClick={(e) => {
                           e.stopPropagation();
                           togglePhotoSelection(photo.id);
@@ -417,18 +461,50 @@ export default function HostGallery() {
                         </div>
                       </div>
 
-                      {/* Delete Button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteSingle(photo.id);
-                        }}
-                        disabled={deletingPhotoIds.has(photo.id)}
-                        className="absolute top-2 right-2 p-1.5 bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 disabled:opacity-50 disabled:cursor-not-allowed"
-                        title="Delete photo"
-                      >
-                        <TrashIcon className="w-4 h-4" />
-                      </button>
+                      {/* Approval Status Badge */}
+                      {!photo.approved && (
+                        <div className="absolute top-2 left-2 z-10 px-2 py-1 bg-yellow-500 text-white text-xs font-medium rounded-lg">
+                          Pending
+                        </div>
+                      )}
+                      {photo.approved && (
+                        <div className="absolute top-2 left-2 z-10 px-2 py-1 bg-emerald text-white text-xs font-medium rounded-lg">
+                          Approved
+                        </div>
+                      )}
+
+                      {/* Action Buttons */}
+                      <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleApprovePhoto(photo.id, !photo.approved);
+                          }}
+                          className={`p-1.5 rounded-lg transition-colors ${
+                            photo.approved 
+                              ? 'bg-white/90 text-black hover:bg-white' 
+                              : 'bg-emerald text-white hover:bg-emerald-dark'
+                          }`}
+                          title={photo.approved ? 'Unapprove photo' : 'Approve photo'}
+                        >
+                          {photo.approved ? (
+                            <XMarkIcon className="w-4 h-4" />
+                          ) : (
+                            <CheckIcon className="w-4 h-4" />
+                          )}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteSingle(photo.id);
+                          }}
+                          disabled={deletingPhotoIds.has(photo.id)}
+                          className="p-1.5 bg-red-600 text-white rounded-lg transition-colors hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Delete photo"
+                        >
+                          <TrashIcon className="w-4 h-4" />
+                        </button>
+                      </div>
 
                       {/* Overlay on hover */}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
@@ -469,6 +545,30 @@ export default function HostGallery() {
               </div>
             )}
             <div className="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+              <button
+                onClick={() => {
+                  handleApprovePhoto(viewingPhoto.id, !viewingPhoto.approved);
+                  // Update viewing photo state
+                  setViewingPhoto({ ...viewingPhoto, approved: !viewingPhoto.approved });
+                }}
+                className={`inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium rounded-xl transition-colors ${
+                  viewingPhoto.approved
+                    ? 'text-black bg-white hover:bg-gray-100'
+                    : 'text-white bg-emerald hover:bg-emerald-dark'
+                }`}
+              >
+                {viewingPhoto.approved ? (
+                  <>
+                    <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    Unapprove
+                  </>
+                ) : (
+                  <>
+                    <CheckIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    Approve
+                  </>
+                )}
+              </button>
               <button
                 onClick={() => {
                   const link = document.createElement('a');

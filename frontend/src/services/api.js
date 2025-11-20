@@ -1,6 +1,21 @@
 // src/services/api.js
 import { auth } from "../lib/firebase";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
+// Determine API base URL
+// If VITE_API_BASE_URL is set in .env, use it
+// Otherwise, use the current hostname with port 8000 (for local development)
+const getApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  
+  // Auto-detect: use current hostname with port 8000
+  // This works when frontend and backend are on the same machine/network
+  const hostname = window.location.hostname;
+  return `http://${hostname}:8000`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 /**
  * Generic fetch wrapper that automatically attaches Firebase ID token
  * @param {string} endpoint - API endpoint (e.g., '/auth/signin')
@@ -290,6 +305,20 @@ export async function uploadEventCover(eventId, file) {
  */
 export async function getEventPhotos(eventId, page = 1, pageSize = 100) {
   return apiCall(`/events/${eventId}/photos?page=${page}&page_size=${pageSize}`);
+}
+
+/**
+ * Update photo metadata (caption, approval status)
+ * @param {string} eventId - Event ID
+ * @param {string} photoId - Photo ID
+ * @param {object} updates - Update data (caption, approved)
+ * @returns {Promise<object>} - Updated photo data
+ */
+export async function updatePhoto(eventId, photoId, updates) {
+  return apiCall(`/events/${eventId}/photos/${photoId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updates),
+  });
 }
 
 /**
