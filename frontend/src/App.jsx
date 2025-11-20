@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
@@ -14,6 +14,12 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 //import NotFound from './pages/NotFound';
 
+// Redirect component for backward compatibility with old /events/:id route
+function EventsRedirect() {
+  const { id } = useParams();
+  return <Navigate to={`/event/${id}`} replace />;
+}
+
 function App() {
   return (
     <AuthProvider>
@@ -25,6 +31,8 @@ function App() {
           <Route path="/signin" element={<Signin />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          {/* Redirect old /events/:id to /event/:id for backward compatibility */}
+          <Route path="/events/:id" element={<EventsRedirect />} />
           <Route path="/event/:id" element={<EventGallery />} />
           
           {/* Protected routes - require authentication */}
