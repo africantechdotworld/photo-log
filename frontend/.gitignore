@@ -27,3 +27,8 @@ junk
 
 # Local tracking file - should never be committed
 CHANGES.md
+
+# Environment variables
+.env
+.env.local
+.env.*.local
