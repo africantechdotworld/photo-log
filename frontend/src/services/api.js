@@ -51,27 +51,64 @@ export async function apiCall(endpoint, options = {}) {
  * @returns {Promise<object>} - User data from backend
  */
 export async function signUp(email, password, name) {
-  const { createUserWithEmailAndPassword, updateProfile } = await import("firebase/auth");
-  // Create Firebase user
-  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  // Update display name in Firebase
-  await updateProfile(userCredential.user, { displayName: name });
-  // Send user info to backend
-  const idToken = await userCredential.user.getIdToken();
-  const response = await fetch(`${API_BASE_URL}/auth/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      token: idToken,
-    }),
-  });
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.detail || "Failed to register user");
+  const { createUserWithEmailAndPassword, updateProfile, deleteUser } = await import("firebase/auth");
+  let userCredential = null;
+  
+  try {
+    // Create Firebase user
+    userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    // Update display name in Firebase
+    await updateProfile(userCredential.user, { displayName: name });
+    // Send user info to backend
+    const idToken = await userCredential.user.getIdToken();
+    
+    const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: idToken,
+      }),
+    });
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      
+      // If email already exists (409 Conflict), delete the Firebase user we just created
+      // to prevent orphaned accounts
+      if (response.status === 409) {
+        try {
+          await deleteUser(userCredential.user);
+          console.log("Deleted Firebase user due to email conflict");
+        } catch (deleteErr) {
+          console.warn("Failed to delete Firebase user after conflict:", deleteErr);
+        }
+        throw new Error(error.detail || "An account with this email already exists. Please sign in instead.");
+      }
+      
+      // If backend fails, we should still allow the user to proceed
+      // The backend might be down, but Firebase user is created
+      // User can try to sign in later and backend will sync
+      if (response.status === 404) {
+        throw new Error(`Backend endpoint not found. Is the server running at ${API_BASE_URL}?`);
+      }
+      throw new Error(error.detail || `Failed to register user: ${response.status}`);
+    }
+    
+    return response.json();
+  } catch (err) {
+    // Handle Firebase configuration errors
+    if (err.code === 'auth/network-request-failed' || err.message?.includes('hostname could not be found')) {
+      throw new Error('Firebase configuration error: Please check your VITE_FIREBASE_AUTH_DOMAIN environment variable. It should be in the format "your-project.firebaseapp.com" or "your-project.web.app"');
+    }
+    // Handle email already in use error from Firebase
+    if (err.code === 'auth/email-already-in-use') {
+      throw new Error('An account with this email already exists. Please sign in instead.');
+    }
+    // Re-throw the error so the UI can handle it
+    throw err;
   }
-  return response.json();
 }
 /**
  * Sign in with email and password
@@ -113,8 +150,9 @@ export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   const userCredential = await signInWithPopup(auth, provider);
   const idToken = await userCredential.user.getIdToken();
-  // Send Google sign-in to backend
-  const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+  
+  // Send Google sign-in to backend signin endpoint
+  const response = await fetch(`${API_BASE_URL}/auth/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -123,11 +161,93 @@ export async function signInWithGoogle() {
       token: idToken,
     }),
   });
+  
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
+    if (response.status === 404) {
+      throw new Error(`Backend endpoint not found. Is the server running at ${API_BASE_URL}?`);
+    }
     throw new Error(error.detail || "Failed to sign in with Google");
   }
+  
   return response.json();
+}
+
+/**
+ * Sign up with Google
+ * @returns {Promise<object>} - User data from backend
+ */
+export async function signUpWithGoogle() {
+  const { GoogleAuthProvider, signInWithPopup } = await import("firebase/auth");
+  const provider = new GoogleAuthProvider();
+  let userCredential = null;
+  
+  try {
+    userCredential = await signInWithPopup(auth, provider);
+    const idToken = await userCredential.user.getIdToken();
+    
+    // Try signup first
+    const signupResponse = await fetch(`${API_BASE_URL}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: idToken,
+      }),
+    });
+    
+    // If signup succeeds, return the response
+    if (signupResponse.ok) {
+      return signupResponse.json();
+    }
+    
+    // If email already exists (409 Conflict), automatically try signin instead
+    if (signupResponse.status === 409) {
+      console.log("Account already exists, automatically signing in...");
+      
+      // Try signin with the same token
+      const signinResponse = await fetch(`${API_BASE_URL}/auth/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: idToken,
+        }),
+      });
+      
+      if (!signinResponse.ok) {
+        const error = await signinResponse.json().catch(() => ({}));
+        if (signinResponse.status === 404) {
+          throw new Error(`Backend endpoint not found. Is the server running at ${API_BASE_URL}?`);
+        }
+        throw new Error(error.detail || "Failed to sign in with existing account");
+      }
+      
+      // Return signin response - user is now signed in to existing account
+      return signinResponse.json();
+    }
+    
+    // Handle other errors
+    const error = await signupResponse.json().catch(() => ({}));
+    if (signupResponse.status === 404) {
+      throw new Error(`Backend endpoint not found. Is the server running at ${API_BASE_URL}?`);
+    }
+    throw new Error(error.detail || `Failed to sign up with Google: ${signupResponse.status}`);
+    
+  } catch (err) {
+    // Handle Firebase account exists with different credential error
+    if (err.code === 'auth/account-exists-with-different-credential') {
+      throw new Error('An account with this email already exists. Please sign in with your existing account instead.');
+    }
+    // Handle email already in use error from Firebase
+    if (err.code === 'auth/email-already-in-use') {
+      throw new Error('An account with this email already exists. Please sign in instead.');
+    }
+    // Re-throw the error so the UI can handle it
+    throw err;
+  }
 }
 /**
  * Sign out the current user

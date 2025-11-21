@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { EnvelopeIcon, InformationCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { sendEmailVerification, checkEmailVerification } from '../services/api';
+import { auth } from '../lib/firebase';
 
 export default function VerifyEmail() {
   const location = useLocation();
@@ -19,6 +20,8 @@ export default function VerifyEmail() {
   const [isChecking, setIsChecking] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [initialEmailSent, setInitialEmailSent] = useState(false);
+  
   // Countdown timer for resend button
   useEffect(() => {
     if (resendCooldown > 0) {
@@ -26,6 +29,26 @@ export default function VerifyEmail() {
       return () => clearTimeout(timer);
     }
   }, [resendCooldown]);
+
+  // Automatically send verification email on mount if user is signed in and email hasn't been sent
+  useEffect(() => {
+    const sendInitialVerification = async () => {
+      // Only send if coming from signup (no 'from' in state) and not already sent
+      // Check if user is authenticated before trying to send
+      if (!initialEmailSent && !location.state?.from && auth.currentUser) {
+        try {
+          await sendEmailVerification(email);
+          setInitialEmailSent(true);
+        } catch (err) {
+          // Don't show error on initial send - user can resend manually
+          console.warn('Failed to send initial verification email:', err);
+        }
+      }
+    };
+    
+    sendInitialVerification();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount
 
   const handleResend = async () => {
     if (resendCooldown > 0) return;
@@ -36,6 +59,7 @@ export default function VerifyEmail() {
     try {
       await sendEmailVerification(email);
       setResendSuccess(true);
+      setInitialEmailSent(true);
       setResendCooldown(60); // 60 seconds cooldown
       setTimeout(() => setResendSuccess(false), 5000); // Hide success message after 5 seconds
     } catch (err) {

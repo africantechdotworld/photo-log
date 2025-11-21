@@ -11,6 +11,23 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
+// Validate Firebase configuration
+if (!firebaseConfig.apiKey || !firebaseConfig.authDomain || !firebaseConfig.projectId) {
+  console.error("Firebase configuration is missing required fields:", {
+    apiKey: firebaseConfig.apiKey ? "✓" : "✗",
+    authDomain: firebaseConfig.authDomain ? "✓" : "✗",
+    projectId: firebaseConfig.projectId ? "✓" : "✗",
+  });
+  throw new Error("Firebase configuration is incomplete. Please check your environment variables.");
+}
+
+// Validate authDomain format (should include .firebaseapp.com or .web.app)
+if (firebaseConfig.authDomain && !firebaseConfig.authDomain.includes('.') && !firebaseConfig.authDomain.includes('localhost')) {
+  console.error("Firebase authDomain appears to be incomplete:", firebaseConfig.authDomain);
+  console.error("Expected format: 'your-project.firebaseapp.com' or 'your-project.web.app'");
+  throw new Error(`Invalid Firebase authDomain: ${firebaseConfig.authDomain}. It should be in the format 'your-project.firebaseapp.com' or 'your-project.web.app'`);
+}
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 

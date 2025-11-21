@@ -7,7 +7,8 @@ import {
   CheckCircleIcon,
   CalendarIcon,
   ArrowLeftIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
+  ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
 import { getPublicEvent, getPublicEventPhotos, uploadPublicPhoto, verifyEventPassword } from '../services/api';
 
@@ -503,6 +504,38 @@ export default function EventGallery() {
                 Uploaded {new Date(viewingPhoto.uploaded_at).toLocaleDateString()}
               </div>
             )}
+            <div className="mt-6 flex justify-center">
+              <button
+                onClick={async () => {
+                  try {
+                    // Fetch the image as a blob
+                    const response = await fetch(viewingPhoto.url);
+                    const blob = await response.blob();
+                    
+                    // Create an object URL from the blob
+                    const objectUrl = URL.createObjectURL(blob);
+                    
+                    // Create a download link
+                    const link = document.createElement('a');
+                    link.href = objectUrl;
+                    link.download = `photo-${viewingPhoto.id}.jpg`;
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    // Clean up
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(objectUrl);
+                  } catch (error) {
+                    console.error('Failed to download image:', error);
+                    alert('Failed to download image. Please try again.');
+                  }
+                }}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-black bg-white rounded-xl hover:bg-gray-100 transition-colors sm:px-8 sm:py-3.5 sm:text-base"
+              >
+                <ArrowDownTrayIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                Download
+              </button>
+            </div>
           </div>
         </div>
       )}
