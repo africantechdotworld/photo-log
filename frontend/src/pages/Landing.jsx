@@ -229,7 +229,7 @@ export default function Landing() {
       </section>
 
       {/* Key Features Section */}
-      <section className="py-12 sm:py-16 lg:py-24 bg-deep-green">
+      {/* <section className="py-12 sm:py-16 lg:py-24 bg-deep-green">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16 lg:mb-20">
             <h2 className="mb-3 text-3xl font-bold text-white sm:text-4xl md:text-5xl lg:text-6xl sm:mb-4">
@@ -240,7 +240,6 @@ export default function Landing() {
             </p>
           </div>
 
-          {/* Feature 1: Full-width image with overlay text */}
           <div className="relative mb-16 sm:mb-24 lg:mb-32">
             <div className="aspect-[4/3] sm:aspect-[21/9] overflow-hidden rounded-2xl sm:rounded-3xl">
               <img
@@ -262,7 +261,6 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Feature 2: Centered text with side-by-side images */}
           <div className="mb-16 sm:mb-24 lg:mb-32">
             <div className="px-4 mx-auto mb-8 max-w-3xl text-center sm:mb-10 lg:mb-12">
               <h3 className="mb-4 text-2xl font-bold text-white sm:text-3xl md:text-4xl lg:text-5xl sm:mb-5 lg:mb-6">
@@ -293,7 +291,6 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Feature 3: Split screen with gradient */}
           <div className="grid overflow-hidden gap-0 rounded-2xl lg:grid-cols-2 sm:rounded-3xl">
             <div className="aspect-[4/3] sm:aspect-[3/4] lg:aspect-auto lg:min-h-[500px] overflow-hidden order-2 lg:order-1">
               <img
@@ -316,7 +313,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Use Cases Section */}
       <section className="py-12 bg-white sm:py-16 lg:py-24">
@@ -575,7 +572,7 @@ export default function Landing() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-12 bg-gradient-to-b from-white sm:py-16 lg:py-32 to-cream">
+      {/* <section className="py-12 bg-gradient-to-b from-white sm:py-16 lg:py-32 to-cream">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="mb-10 text-center sm:mb-16 lg:mb-20">
             <h2 className="mb-3 text-3xl font-bold text-black sm:text-4xl md:text-5xl lg:text-6xl sm:mb-4">
@@ -587,7 +584,6 @@ export default function Landing() {
           </div>
 
           <div className="grid gap-6 mx-auto max-w-6xl sm:grid-cols-2 lg:grid-cols-3 sm:gap-8 lg:gap-12">
-            {/* Starter Plan */}
             <div className="relative p-6 bg-white rounded-2xl border-2 sm:rounded-3xl sm:p-8 border-black/5">
               <div className="mb-6 sm:mb-8">
                 <h3 className="mb-2 text-xl font-bold text-black sm:text-2xl sm:mb-3">Starter</h3>
@@ -639,7 +635,6 @@ export default function Landing() {
               </Link>
             </div>
 
-            {/* Professional Plan - Featured */}
             <div className="relative p-6 bg-gradient-to-br rounded-2xl border-4 transform from-deep-green to-teal-brown sm:rounded-3xl sm:p-8 border-gold lg:-translate-y-4 lg:scale-105 sm:col-span-2 lg:col-span-1">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 sm:-top-4">
                 <span className="bg-gold text-black px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider">
@@ -704,7 +699,6 @@ export default function Landing() {
               </Link>
             </div>
 
-            {/* Enterprise Plan */}
             <div className="relative p-6 bg-white rounded-2xl border-2 sm:rounded-3xl sm:p-8 border-black/5 sm:col-span-2 lg:col-span-1">
               <div className="mb-6 sm:mb-8">
                 <h3 className="mb-2 text-xl font-bold text-black sm:text-2xl sm:mb-3">Enterprise</h3>
@@ -780,7 +774,7 @@ export default function Landing() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Final CTA Section */}
       <section className="overflow-hidden relative py-16 bg-gradient-to-br sm:py-24 lg:py-32 from-deep-green via-deep-green-dark to-deep-green">
