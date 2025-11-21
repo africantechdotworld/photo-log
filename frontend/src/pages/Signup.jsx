@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { signUp, signInWithGoogle } from '../services/api';
+import { signUp, signUpWithGoogle, sendEmailVerification } from '../services/api';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -39,7 +39,18 @@ export default function Signup() {
     setLoading(true);
 
     try {
+      // Sign up with Firebase and backend
       await signUp(formData.email, formData.password, formData.name);
+      
+      // Send verification email immediately after successful signup
+      try {
+        await sendEmailVerification(formData.email);
+      } catch (verifyError) {
+        // Log but don't fail - user can resend from verify page
+        console.warn('Failed to send verification email:', verifyError);
+      }
+      
+      // Navigate to verify email page
       navigate('/verify-email', { state: { email: formData.email } });
     } catch (err) {
       // Handle Firebase-specific errors
@@ -50,6 +61,8 @@ export default function Signup() {
         setError('Password is too weak');
       } else if (message.includes('operation-not-allowed')) {
         setError('Email/Password authentication is not enabled. Please contact support.');
+      } else if (message.includes('Backend endpoint not found')) {
+        setError('Unable to connect to server. Please check your connection and try again.');
       } else {
         setError(message);
       }
@@ -63,10 +76,27 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      await signInWithGoogle();
-      navigate('/');
+      const response = await signUpWithGoogle();
+      
+      // Google sign-up typically verifies email automatically, but check anyway
+      if (response.user && !response.user.email_verified) {
+        try {
+          await sendEmailVerification(response.user.email);
+        } catch (verifyError) {
+          console.warn('Failed to send verification email:', verifyError);
+        }
+        navigate('/verify-email', { state: { email: response.user.email } });
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
-      setError(err.message || 'Failed to sign up with Google.');
+      // Handle specific error messages
+      const message = err.message || 'Failed to sign up with Google.';
+      if (message.includes('already exists')) {
+        setError('An account with this email already exists. Please sign in instead.');
+      } else {
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
@@ -266,12 +296,12 @@ export default function Signup() {
                 </div>
 
                 {/* Social Signup Buttons */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div>
                   <button
                     type="button"
                     onClick={handleGoogleSignUp}
                     disabled={loading}
-                    className="flex justify-center items-center px-4 py-3 text-black bg-white rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
+                    className="flex justify-center items-center w-full px-4 py-3 text-black bg-white rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
                   >
                     <svg className="mr-2 w-5 h-5" viewBox="0 0 24 24">
                       <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -279,8 +309,9 @@ export default function Signup() {
                       <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                       <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
-                    <span className="text-sm font-medium">Google</span>
+                    <span className="text-sm font-medium">Continue with Google</span>
                   </button>
+                  {/* Apple Sign Up - Commented out (not implemented)
                   <button
                     type="button"
                     className="flex justify-center items-center px-4 py-3 text-black bg-white rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
@@ -290,6 +321,7 @@ export default function Signup() {
                     </svg>
                     <span className="text-sm font-medium">Apple</span>
                   </button>
+                  */}
                 </div>
 
                 {/* Mobile Image - Shown only on mobile */}

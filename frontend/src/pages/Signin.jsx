@@ -1,9 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import {signIn, signInWithGoogle } from '../services/api'
+import { signIn, signInWithGoogle, sendEmailVerification } from '../services/api';
 
 export default function Signin() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -18,8 +20,25 @@ export default function Signin() {
     setLoading(true);
 
     try {
-      await signIn(formData.email, formData.password);
-      navigate('/'); // Redirect to home or dashboard
+      const response = await signIn(formData.email, formData.password);
+      
+      // Check if email is verified
+      if (response.user && !response.user.email_verified) {
+        // Send verification email
+        try {
+          await sendEmailVerification(response.user.email || formData.email);
+        } catch (verifyError) {
+          console.warn('Failed to send verification email:', verifyError);
+          // Continue anyway - user can request it again on verify page
+        }
+        // Redirect to verify email page
+        navigate('/verify-email', { 
+          state: { email: response.user.email || formData.email, from } 
+        });
+      } else {
+        // Email is verified, redirect to the page they were trying to access or dashboard
+        navigate(from);
+      }
     } catch (err) {
       setError(err.message || 'Failed to sign in. Please try again.');
     } finally {
@@ -32,8 +51,21 @@ export default function Signin() {
     setLoading(true);
 
     try {
-      await signInWithGoogle();
-      navigate('/');
+      const response = await signInWithGoogle();
+      
+      // Google sign-in typically verifies email automatically, but check anyway
+      if (response.user && !response.user.email_verified) {
+        try {
+          await sendEmailVerification(response.user.email);
+        } catch (verifyError) {
+          console.warn('Failed to send verification email:', verifyError);
+        }
+        navigate('/verify-email', { 
+          state: { email: response.user.email, from } 
+        });
+      } else {
+        navigate(from);
+      }
     } catch (err) {
       setError(err.message || 'Failed to sign in with Google.');
     } finally {
@@ -201,12 +233,12 @@ export default function Signin() {
                 </div>
 
                 {/* Social Signin Buttons */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div>
                   <button
                     type="button"
                     onClick={handleGoogleSignIn}
                     disabled={loading}
-                    className="flex justify-center items-center px-4 py-3 text-black bg-white rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
+                    className="flex justify-center items-center w-full px-4 py-3 text-black bg-white rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
                   >
                     <svg className="mr-2 w-5 h-5" viewBox="0 0 24 24">
                       <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -214,8 +246,9 @@ export default function Signin() {
                       <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                       <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
-                    <span className="text-sm font-medium">Google</span>
+                    <span className="text-sm font-medium">Continue with Google</span>
                   </button>
+                  {/* Apple Sign In - Commented out (not implemented)
                   <button
                     type="button"
                     className="flex justify-center items-center px-4 py-3 text-black bg-white rounded-xl border transition-colors border-black/10 hover:bg-cream-dark"
@@ -225,6 +258,7 @@ export default function Signin() {
                     </svg>
                     <span className="text-sm font-medium">Apple</span>
                   </button>
+                  */}
                 </div>
 
                 {/* Mobile Image - Shown only on mobile */}

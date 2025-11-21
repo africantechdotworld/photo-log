@@ -10,6 +10,7 @@ import {
   ShieldCheckIcon,
   ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
+import { signOut } from '../services/api';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -96,9 +97,16 @@ export default function AdminDashboard() {
     navigate(`/host/event/${eventId}`);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     if (window.confirm('Are you sure you want to log out?')) {
-      navigate('/admin/login');
+      try {
+        await signOut();
+        navigate('/admin/login');
+      } catch (err) {
+        console.error('Error signing out:', err);
+        // Still navigate to login even if signOut fails
+        navigate('/admin/login');
+      }
     }
   };
 
