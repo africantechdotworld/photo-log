@@ -1,6 +1,5 @@
 // src/services/api.js
 import { auth } from "../lib/firebase";
-
 // Determine API base URL
 // If VITE_API_BASE_URL is set in .env, use it
 // Otherwise, use the current hostname with port 8000 (for local development)
@@ -8,13 +7,11 @@ const getApiBaseUrl = () => {
   if (import.meta.env.VITE_API_BASE_URL) {
     return import.meta.env.VITE_API_BASE_URL;
   }
-  
   // Auto-detect: use current hostname with port 8000
   // This works when frontend and backend are on the same machine/network
   const hostname = window.location.hostname;
   return `http://${hostname}:8000`;
 };
-
 const API_BASE_URL = getApiBaseUrl();
 /**
  * Generic fetch wrapper that automatically attaches Firebase ID token
@@ -53,7 +50,6 @@ export async function apiCall(endpoint, options = {}) {
 export async function signUp(email, password, name) {
   const { createUserWithEmailAndPassword, updateProfile, deleteUser } = await import("firebase/auth");
   let userCredential = null;
-  
   try {
     // Create Firebase user
     userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -61,7 +57,6 @@ export async function signUp(email, password, name) {
     await updateProfile(userCredential.user, { displayName: name });
     // Send user info to backend
     const idToken = await userCredential.user.getIdToken();
-    
     const response = await fetch(`${API_BASE_URL}/auth/signup`, {
       method: "POST",
       headers: {
@@ -71,10 +66,8 @@ export async function signUp(email, password, name) {
         token: idToken,
       }),
     });
-    
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      
       // If email already exists (409 Conflict), delete the Firebase user we just created
       // to prevent orphaned accounts
       if (response.status === 409) {
@@ -86,7 +79,6 @@ export async function signUp(email, password, name) {
         }
         throw new Error(error.detail || "An account with this email already exists. Please sign in instead.");
       }
-      
       // If backend fails, we should still allow the user to proceed
       // The backend might be down, but Firebase user is created
       // User can try to sign in later and backend will sync
@@ -95,7 +87,6 @@ export async function signUp(email, password, name) {
       }
       throw new Error(error.detail || `Failed to register user: ${response.status}`);
     }
-    
     return response.json();
   } catch (err) {
     // Handle Firebase configuration errors
@@ -150,7 +141,6 @@ export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   const userCredential = await signInWithPopup(auth, provider);
   const idToken = await userCredential.user.getIdToken();
-  
   // Send Google sign-in to backend signin endpoint
   const response = await fetch(`${API_BASE_URL}/auth/signin`, {
     method: "POST",
@@ -161,7 +151,6 @@ export async function signInWithGoogle() {
       token: idToken,
     }),
   });
-  
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     if (response.status === 404) {
@@ -169,10 +158,8 @@ export async function signInWithGoogle() {
     }
     throw new Error(error.detail || "Failed to sign in with Google");
   }
-  
   return response.json();
 }
-
 /**
  * Sign up with Google
  * @returns {Promise<object>} - User data from backend
@@ -181,11 +168,9 @@ export async function signUpWithGoogle() {
   const { GoogleAuthProvider, signInWithPopup } = await import("firebase/auth");
   const provider = new GoogleAuthProvider();
   let userCredential = null;
-  
   try {
     userCredential = await signInWithPopup(auth, provider);
     const idToken = await userCredential.user.getIdToken();
-    
     // Try signup first
     const signupResponse = await fetch(`${API_BASE_URL}/auth/signup`, {
       method: "POST",
@@ -196,16 +181,13 @@ export async function signUpWithGoogle() {
         token: idToken,
       }),
     });
-    
     // If signup succeeds, return the response
     if (signupResponse.ok) {
       return signupResponse.json();
     }
-    
     // If email already exists (409 Conflict), automatically try signin instead
     if (signupResponse.status === 409) {
       console.log("Account already exists, automatically signing in...");
-      
       // Try signin with the same token
       const signinResponse = await fetch(`${API_BASE_URL}/auth/signin`, {
         method: "POST",
@@ -216,7 +198,6 @@ export async function signUpWithGoogle() {
           token: idToken,
         }),
       });
-      
       if (!signinResponse.ok) {
         const error = await signinResponse.json().catch(() => ({}));
         if (signinResponse.status === 404) {
@@ -224,18 +205,15 @@ export async function signUpWithGoogle() {
         }
         throw new Error(error.detail || "Failed to sign in with existing account");
       }
-      
       // Return signin response - user is now signed in to existing account
       return signinResponse.json();
     }
-    
     // Handle other errors
     const error = await signupResponse.json().catch(() => ({}));
     if (signupResponse.status === 404) {
       throw new Error(`Backend endpoint not found. Is the server running at ${API_BASE_URL}?`);
     }
     throw new Error(error.detail || `Failed to sign up with Google: ${signupResponse.status}`);
-    
   } catch (err) {
     // Handle Firebase account exists with different credential error
     if (err.code === 'auth/account-exists-with-different-credential') {
@@ -255,7 +233,6 @@ export async function signUpWithGoogle() {
 export async function signOut() {
   await auth.signOut();
 }
-
 /**
  * Admin sign in
  * Verifies Firebase token and checks if user has admin privileges
@@ -265,11 +242,9 @@ export async function signOut() {
  */
 export async function adminSignIn(email, password) {
   const { signInWithEmailAndPassword } = await import("firebase/auth");
-  
   // Sign in with Firebase
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
   const idToken = await userCredential.user.getIdToken();
-  
   // Verify admin access with backend
   const response = await fetch(`${API_BASE_URL}/admin/auth/signin`, {
     method: "POST",
@@ -278,23 +253,41 @@ export async function adminSignIn(email, password) {
     },
     body: JSON.stringify({ token: idToken }),
   });
-  
   if (!response.ok) {
     // Sign out from Firebase if backend rejects
     await auth.signOut();
     const error = await response.json().catch(() => ({}));
     throw new Error(error.detail || `Admin access denied: ${response.status}`);
   }
-  
   return response.json();
 }
 /**
  * Send password reset email
+ * Sends reset email via Firebase and notifies backend
  * @param {string} email
  */
 export async function sendPasswordReset(email) {
   const { sendPasswordResetEmail } = await import("firebase/auth");
+  // Send password reset email via Firebase
   await sendPasswordResetEmail(auth, email);
+  // Notify backend about the password reset request
+  const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email,
+    }),
+  });
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    if (response.status === 404) {
+      throw new Error(`Backend endpoint not found. Is the server running at ${API_BASE_URL}?`);
+    }
+    throw new Error(error.detail || `Failed to process password reset request: ${response.status}`);
+  }
+  return response.json();
 }
 /**
  * Send email verification link
@@ -322,7 +315,6 @@ export async function sendEmailVerification(email) {
     console.warn("Failed to notify backend of verification email:", error);
   }
 }
-
 /**
  * Check if email is verified
  * Reloads the current user to get the latest verification status
@@ -332,13 +324,10 @@ export async function checkEmailVerification() {
   if (!auth.currentUser) {
     throw new Error("No user is currently signed in");
   }
-  
   // Reload user to get latest verification status
   await auth.currentUser.reload();
-  
   return auth.currentUser.emailVerified;
 }
-
 /**
  * Verify email OTP (Firebase handles this natively)
  * For custom OTP, implement via backend endpoint
@@ -366,7 +355,6 @@ export async function getCurrentToken() {
 export function getCurrentUser() {
   return auth.currentUser;
 }
-
 /**
  * Get list of events for the current user
  * @param {number} page - Page number (default: 1)
@@ -376,7 +364,6 @@ export function getCurrentUser() {
 export async function getEvents(page = 1, pageSize = 100) {
   return apiCall(`/events?page=${page}&page_size=${pageSize}`);
 }
-
 /**
  * Get event details by ID
  * @param {string} eventId - Event ID
@@ -385,7 +372,6 @@ export async function getEvents(page = 1, pageSize = 100) {
 export async function getEvent(eventId) {
   return apiCall(`/events/${eventId}`);
 }
-
 /**
  * Delete an event
  * @param {string} eventId - Event ID
@@ -396,7 +382,6 @@ export async function deleteEvent(eventId) {
     method: 'DELETE',
   });
 }
-
 /**
  * Get QR code for an event
  * @param {string} eventId - Event ID
@@ -405,7 +390,6 @@ export async function deleteEvent(eventId) {
 export async function getEventQRCode(eventId) {
   return apiCall(`/events/${eventId}/qr`);
 }
-
 /**
  * Create a new event
  * @param {object} eventData - Event data (name, description, date, password)
@@ -417,7 +401,6 @@ export async function createEvent(eventData) {
     body: JSON.stringify(eventData),
   });
 }
-
 /**
  * Upload cover image for an event
  * @param {string} eventId - Event ID
@@ -427,28 +410,23 @@ export async function createEvent(eventData) {
 export async function uploadEventCover(eventId, file) {
   const formData = new FormData();
   formData.append('file', file);
-
   // Get the current user's ID token if authenticated
   const headers = {};
   if (auth.currentUser) {
     const idToken = await auth.currentUser.getIdToken();
     headers['Authorization'] = `Bearer ${idToken}`;
   }
-
   const response = await fetch(`${API_BASE_URL}/events/${eventId}/cover`, {
     method: 'POST',
     headers,
     body: formData,
   });
-
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     throw new Error(error.detail || `API error: ${response.status}`);
   }
-
   return response.json();
 }
-
 /**
  * Get photos for an event
  * @param {string} eventId - Event ID
@@ -459,7 +437,6 @@ export async function uploadEventCover(eventId, file) {
 export async function getEventPhotos(eventId, page = 1, pageSize = 100) {
   return apiCall(`/events/${eventId}/photos?page=${page}&page_size=${pageSize}`);
 }
-
 /**
  * Update photo metadata (caption, approval status)
  * @param {string} eventId - Event ID
@@ -473,7 +450,6 @@ export async function updatePhoto(eventId, photoId, updates) {
     body: JSON.stringify(updates),
   });
 }
-
 /**
  * Delete a single photo
  * @param {string} eventId - Event ID
@@ -485,7 +461,6 @@ export async function deletePhoto(eventId, photoId) {
     method: 'DELETE',
   });
 }
-
 /**
  * Bulk delete photos
  * @param {string} eventId - Event ID
@@ -498,7 +473,6 @@ export async function bulkDeletePhotos(eventId, photoIds) {
     body: JSON.stringify({ photo_ids: photoIds }),
   });
 }
-
 /**
  * Public API call (no authentication required)
  * @param {string} endpoint - API endpoint (e.g., '/public/events/{slug}')
@@ -509,20 +483,16 @@ async function publicApiCall(endpoint, options = {}) {
   const headers = {
     ...options.headers,
   };
-  
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers,
   });
-  
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     throw new Error(error.detail || `API error: ${response.status}`);
   }
-  
   return response.json();
 }
-
 /**
  * Get public event information
  * @param {string} slug - Event ID (used as slug)
@@ -531,7 +501,6 @@ async function publicApiCall(endpoint, options = {}) {
 export async function getPublicEvent(slug) {
   return publicApiCall(`/public/events/${slug}`);
 }
-
 /**
  * Get approved photos for a public event
  * @param {string} slug - Event ID (used as slug)
@@ -542,7 +511,6 @@ export async function getPublicEvent(slug) {
 export async function getPublicEventPhotos(slug, page = 1, pageSize = 20) {
   return publicApiCall(`/public/events/${slug}/photos?page=${page}&page_size=${pageSize}`);
 }
-
 /**
  * Verify event password
  * @param {string} slug - Event ID (used as slug)
@@ -552,20 +520,16 @@ export async function getPublicEventPhotos(slug, page = 1, pageSize = 20) {
 export async function verifyEventPassword(slug, password) {
   const formData = new FormData();
   formData.append('password', password);
-  
   const response = await fetch(`${API_BASE_URL}/public/events/${slug}/verify-password`, {
     method: 'POST',
     body: formData,
   });
-  
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     throw new Error(error.detail || `API error: ${response.status}`);
   }
-  
   return response.json();
 }
-
 /**
  * Upload photo to a public event
  * @param {string} slug - Event ID (used as slug)
@@ -583,16 +547,13 @@ export async function uploadPublicPhoto(slug, file, caption = null, password = n
   if (password) {
     formData.append('password', password);
   }
-  
   const response = await fetch(`${API_BASE_URL}/public/events/${slug}/photos`, {
     method: 'POST',
     body: formData,
   });
-  
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     throw new Error(error.detail || `API error: ${response.status}`);
   }
-  
   return response.json();
 }
