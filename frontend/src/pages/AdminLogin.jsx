@@ -67,7 +67,8 @@ export default function AdminLogin() {
           <div className="px-4 py-8 sm:px-6 lg:px-12 sm:py-12 lg:py-16">
             <div className="mx-auto max-w-md">
               {/* Admin Badge */}
-              <div className="flex justify-center mb-6">
+              <div className="flex flex-col items-center justify-center mb-6">
+                <Logo showText={false} size="md" className="mb-4" />
                 <div className="inline-flex gap-2 items-center px-4 py-2 rounded-xl border border-deep-gold/30 bg-gold/10">
                   <ShieldCheckIcon className="w-5 h-5 text-deep-gold sm:h-6 sm:w-6" />
                   <span className="text-sm font-semibold text-deep-gold sm:text-base">Admin Portal</span>

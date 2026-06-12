@@ -22,10 +22,6 @@ export default function EventDashboard() {
   const [showQrCode, setShowQrCode] = useState(null);
   const [deletingEventId, setDeletingEventId] = useState(null);
 
-  if (loading) {
-    return <LoadingScreen message="Loading dashboard..." />;
-  }
-
   const handleLogout = async () => {
     try {
       await signOut();
@@ -36,9 +32,6 @@ export default function EventDashboard() {
       navigate('/signin');
     }
   };
-  useEffect(() => {
-    fetchEvents();
-  }, []);
   const fetchEvents = async () => {
     try {
       setLoading(true);
@@ -52,6 +45,13 @@ export default function EventDashboard() {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return <LoadingScreen message="Loading dashboard..." />;
+  }
   const handleDelete = async (eventId) => {
     if (window.confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
       try {

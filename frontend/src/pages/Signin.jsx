@@ -137,6 +137,7 @@ export default function Signin() {
             {/* Right Side - Signin Form */}
             <div className="flex flex-col justify-center">
               <div className="mx-auto w-full max-w-md">
+                <Logo showText={false} size="md" className="mb-6" />
                 <div className="mb-6 sm:mb-8">
                   <h1 className="mb-3 text-3xl font-bold text-black sm:text-4xl lg:text-5xl sm:mb-4">
                     Sign In
