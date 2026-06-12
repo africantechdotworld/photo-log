@@ -2,6 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../contexts/AuthContext';
+import Logo from '../components/Logo';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function Landing() {
   const { isAuthenticated, loading } = useAuth();
@@ -15,14 +17,7 @@ export default function Landing() {
 
   // Show loading state while checking auth
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-deep-green">
-        <div className="text-center">
-          <div className="inline-block w-8 h-8 rounded-full border-4 border-solid animate-spin border-cream border-r-transparent"></div>
-          <p className="mt-4 text-cream">Loading...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Checking authentication..." />;
   }
 
   // Don't render landing page if authenticated (redirect will happen)
@@ -40,9 +35,9 @@ export default function Landing() {
           <nav className="px-4 py-4 border-b sm:px-6 lg:px-12 sm:py-6 border-cream-dark/20">
             <div className="flex justify-between items-center">
               <div className="flex items-center">
-                <span className="text-xl font-bold text-black sm:text-2xl">
-                  PhotoLog
-                </span>
+                <Link to="/" className="hover:opacity-90 transition-opacity">
+                  <Logo size="sm" />
+                </Link>
               </div>
               <div className="flex items-center space-x-2 sm:space-x-4">
                 <Link
@@ -833,7 +828,7 @@ export default function Landing() {
           <div className="grid gap-12 mb-12 md:grid-cols-4">
             <div className="md:col-span-2">
               <div className="mb-6">
-                <span className="text-2xl font-bold text-white">PhotoLog</span>
+                <Logo dark={true} size="sm" />
               </div>
               <p className="mb-6 max-w-md leading-relaxed text-white/60">
                 The simplest way to collect and share event photos. No app, no signup, just instant photo sharing.

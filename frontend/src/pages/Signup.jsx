@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { signUp, signUpWithGoogle, sendEmailVerification } from '../services/api';
+import Logo from '../components/Logo';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -117,8 +118,8 @@ export default function Signup() {
           {/* Header Navigation */}
           <nav className="px-4 py-3 border-b sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-cream-dark/20">
             <div className="flex gap-2 justify-between items-center sm:gap-4">
-              <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
-                PhotoLog
+              <Link to="/" className="flex-shrink-0 hover:opacity-90 transition-opacity">
+                <Logo size="sm" />
               </Link>
               <div className="flex gap-2 items-center sm:gap-3 lg:gap-4">
                 <span className="hidden text-xs whitespace-nowrap sm:inline sm:text-sm lg:text-base text-black/60">

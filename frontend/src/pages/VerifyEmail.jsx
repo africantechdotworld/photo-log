@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { EnvelopeIcon, InformationCircleIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { sendEmailVerification, checkEmailVerification } from '../services/api';
 import { auth } from '../lib/firebase';
+import Logo from '../components/Logo';
 
 export default function VerifyEmail() {
   const location = useLocation();
@@ -97,8 +98,8 @@ export default function VerifyEmail() {
           {/* Header Navigation */}
           <nav className="px-4 py-4 border-b sm:px-6 lg:px-12 sm:py-6 border-cream-dark/20">
             <div className="flex justify-between items-center">
-              <Link to="/" className="text-xl font-bold text-black sm:text-2xl">
-                PhotoLog
+              <Link to="/" className="hover:opacity-90 transition-opacity">
+                <Logo size="sm" />
               </Link>
               <Link
                 to="/signin"

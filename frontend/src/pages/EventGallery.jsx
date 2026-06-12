@@ -11,6 +11,8 @@ import {
   ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
 import { getPublicEvent, getPublicEventPhotos, uploadPublicPhoto, verifyEventPassword } from '../services/api';
+import Logo from '../components/Logo';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function EventGallery() {
   const { id } = useParams();
@@ -162,14 +164,7 @@ export default function EventGallery() {
   };
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-deep-green">
-        <div className="text-center">
-          <div className="inline-block w-8 h-8 rounded-full border-4 border-solid animate-spin border-cream border-r-transparent"></div>
-          <p className="mt-4 text-cream">Loading event...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading event gallery..." />;
   }
 
   if (error && !event) {
@@ -204,8 +199,8 @@ export default function EventGallery() {
           {/* Header Navigation */}
           <nav className="px-4 py-3 border-b border-cream-dark/20 sm:px-6 sm:py-4 lg:px-12 lg:py-6">
             <div className="flex gap-2 justify-between items-center sm:gap-4">
-              <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
-                PhotoLog
+              <Link to="/" className="flex-shrink-0 hover:opacity-90 transition-opacity">
+                <Logo size="sm" />
               </Link>
               <Link
                 to="/"

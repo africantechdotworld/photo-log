@@ -7,6 +7,7 @@ import {
   ShieldCheckIcon 
 } from '@heroicons/react/24/outline';
 import { adminSignIn } from '../services/api';
+import Logo from '../components/Logo';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -50,8 +51,8 @@ export default function AdminLogin() {
           {/* Header Navigation */}
           <nav className="px-4 py-3 border-b sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-cream-dark/20">
             <div className="flex gap-2 justify-between items-center sm:gap-4">
-              <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
-                PhotoLog
+              <Link to="/" className="flex-shrink-0 hover:opacity-90 transition-opacity">
+                <Logo size="sm" />
               </Link>
               <Link
                 to="/"

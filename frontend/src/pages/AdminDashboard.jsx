@@ -11,6 +11,7 @@ import {
   ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 import { signOut } from '../services/api';
+import Logo from '../components/Logo';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -120,8 +121,8 @@ export default function AdminDashboard() {
           <nav className="border-b border-cream-dark/20 px-4 py-3 sm:px-6 sm:py-4 lg:px-12 lg:py-6">
             <div className="flex items-center justify-between gap-2 sm:gap-4">
               <div className="flex items-center gap-3">
-                <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
-                  PhotoLog
+                <Link to="/" className="flex-shrink-0 hover:opacity-90 transition-opacity">
+                  <Logo size="sm" />
                 </Link>
                 <div className="rounded-lg border border-deep-gold/30 bg-gold/10 px-2 py-1">
                   <span className="text-xs font-semibold text-deep-gold sm:text-sm">ADMIN</span>

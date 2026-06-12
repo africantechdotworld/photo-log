@@ -10,6 +10,9 @@ import {
   ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 import { signOut, getAdminUsers, updateUserStatus } from '../services/api';
+import Logo from '../components/Logo';
+import LoadingScreen from '../components/LoadingScreen';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function UserManagement() {
   const navigate = useNavigate();
@@ -71,6 +74,10 @@ export default function UserManagement() {
 
   const totalPages = Math.ceil(total / pageSize);
 
+  if (loading && users.length === 0 && !error) {
+    return <LoadingScreen message="Loading users..." />;
+  }
+
   return (
     <div className="min-h-screen bg-deep-green">
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8 sm:py-6 lg:py-8">
@@ -79,8 +86,8 @@ export default function UserManagement() {
           <nav className="border-b border-cream-dark/20 px-4 py-3 sm:px-6 sm:py-4 lg:px-12 lg:py-6">
             <div className="flex items-center justify-between gap-2 sm:gap-4">
               <div className="flex items-center gap-3">
-                <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
-                  PhotoLog
+                <Link to="/" className="flex-shrink-0 hover:opacity-90 transition-opacity">
+                  <Logo size="sm" />
                 </Link>
                 <div className="rounded-lg border border-deep-gold/30 bg-gold/10 px-2 py-1">
                   <span className="text-xs font-semibold text-deep-gold sm:text-sm">ADMIN</span>
@@ -136,7 +143,7 @@ export default function UserManagement() {
             {loading ? (
               <div className="flex justify-center items-center py-12">
                 <div className="text-center">
-                  <div className="inline-block w-8 h-8 rounded-full border-4 border-solid animate-spin border-deep-green border-r-transparent"></div>
+                  <LoadingSpinner size="md" className="mx-auto" />
                   <p className="mt-4 text-black/60">Loading users...</p>
                 </div>
               </div>

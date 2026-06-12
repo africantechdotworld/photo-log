@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import Logo from '../components/Logo';
+import LoadingScreen from '../components/LoadingScreen';
 import { 
   TrashIcon, 
   ArrowDownTrayIcon,
@@ -162,22 +164,7 @@ export default function HostGallery() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-deep-green">
-        <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-6 lg:py-12">
-          <div className="overflow-hidden rounded-2xl bg-cream sm:rounded-3xl">
-            <div className="flex items-center justify-center px-4 py-8 sm:px-6 lg:px-12 sm:py-12 lg:py-16">
-              <div className="text-center">
-                <div className="inline-flex justify-center items-center mb-4 w-16 h-16 rounded-full bg-deep-green/10 text-deep-green">
-                  <PhotoIcon className="w-8 h-8 animate-pulse" />
-                </div>
-                <h3 className="text-lg font-bold text-black sm:text-xl">Loading event...</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading host dashboard..." />;
   }
 
   if (error && !event) {
@@ -214,8 +201,8 @@ export default function HostGallery() {
           {/* Header Navigation */}
           <nav className="px-4 py-3 sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-b border-cream-dark/20">
             <div className="flex justify-between items-center gap-2 sm:gap-4">
-              <Link to="/" className="text-lg sm:text-xl lg:text-2xl font-bold text-black flex-shrink-0">
-                PhotoLog
+              <Link to="/" className="flex-shrink-0 hover:opacity-90 transition-opacity">
+                <Logo size="sm" />
               </Link>
               <Link
                 to="/dashboard"

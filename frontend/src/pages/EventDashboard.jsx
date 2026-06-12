@@ -11,6 +11,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
 import { getEvents, deleteEvent, signOut } from '../services/api';
+import Logo from '../components/Logo';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function EventDashboard() {
   const navigate = useNavigate();
@@ -19,6 +21,10 @@ export default function EventDashboard() {
   const [error, setError] = useState('');
   const [showQrCode, setShowQrCode] = useState(null);
   const [deletingEventId, setDeletingEventId] = useState(null);
+
+  if (loading) {
+    return <LoadingScreen message="Loading dashboard..." />;
+  }
 
   const handleLogout = async () => {
     try {
@@ -86,8 +92,8 @@ export default function EventDashboard() {
           {/* Header Navigation */}
           <nav className="px-4 py-3 border-b sm:px-6 sm:py-4 lg:px-12 lg:py-6 border-cream-dark/20">
             <div className="flex gap-2 justify-between items-center sm:gap-4">
-              <Link to="/" className="flex-shrink-0 text-lg font-bold text-black sm:text-xl lg:text-2xl">
-                PhotoLog
+              <Link to="/" className="flex-shrink-0 hover:opacity-90 transition-opacity">
+                <Logo size="sm" />
               </Link>
               <div className="flex gap-3 items-center sm:gap-4">
                 <Link
@@ -171,15 +177,8 @@ export default function EventDashboard() {
                 <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
-            {/* Loading State */}
-            {loading ? (
-              <div className="py-12 text-center bg-white rounded-xl border sm:py-16 lg:py-20 sm:rounded-2xl border-black/5">
-                <div className="inline-flex justify-center items-center mb-4 w-16 h-16 rounded-full bg-deep-green/10 text-deep-green">
-                  <PhotoIcon className="w-8 h-8 animate-pulse" />
-                </div>
-                <h3 className="mb-2 text-lg font-bold text-black sm:text-xl">Loading events...</h3>
-              </div>
-            ) : events.length === 0 ? (
+            {/* Loading State & Empty State */}
+            {events.length === 0 ? (
               <div className="py-12 text-center bg-white rounded-xl border sm:py-16 lg:py-20 sm:rounded-2xl border-black/5">
                 <div className="inline-flex justify-center items-center mb-4 w-16 h-16 rounded-full bg-deep-green/10 text-deep-green">
                   <PhotoIcon className="w-8 h-8" />
