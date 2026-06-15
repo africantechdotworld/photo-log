@@ -7,20 +7,29 @@ import {
   EyeIcon,
   TrashIcon,
   ArrowDownTrayIcon,
-  LinkIcon
+  LinkIcon,
+  UserIcon,
+  EnvelopeIcon,
+  ArrowRightOnRectangleIcon,
+  ChevronDownIcon
 } from '@heroicons/react/24/outline';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getEvents, deleteEvent, signOut } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import Logo from '../components/Logo';
 import LoadingScreen from '../components/LoadingScreen';
 
 export default function EventDashboard() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showQrCode, setShowQrCode] = useState(null);
   const [deletingEventId, setDeletingEventId] = useState(null);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [profileImgError, setProfileImgError] = useState(false);
+  const profileRef = useRef(null);
 
   const handleLogout = async () => {
     try {
@@ -48,6 +57,17 @@ export default function EventDashboard() {
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  useEffect(() => {
+    if (!showProfileMenu) return;
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showProfileMenu]);
 
   if (loading) {
     return <LoadingScreen message="Loading dashboard..." />;
@@ -110,12 +130,46 @@ export default function EventDashboard() {
                 >
                   <PlusIcon className="w-5 h-5" />
                 </Link>
-                <button
-                  onClick={handleLogout}
-                  className="px-2 text-xs font-medium text-black whitespace-nowrap transition-colors sm:text-sm lg:text-base hover:text-deep-green sm:px-0"
-                >
-                  Logout
-                </button>
+                {/* Profile Menu */}
+                <div className="relative" ref={profileRef}>
+                  <button
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    className="flex items-center gap-2 rounded-full transition-colors hover:bg-cream-dark/30"
+                  >
+                    {(user?.photoURL && !profileImgError) ? (
+                      <img
+                        src={user.photoURL}
+                        alt="Profile"
+                        className="w-8 h-8 rounded-full object-cover"
+                        onError={() => setProfileImgError(true)}
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-deep-green flex items-center justify-center">
+                        <span className="text-sm font-medium text-white">
+                          {user?.displayName?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || '?'}
+                        </span>
+                      </div>
+                    )}
+                    <ChevronDownIcon className={`w-4 h-4 text-black/60 transition-transform ${showProfileMenu ? 'rotate-180' : ''}`} />
+                  </button>
+                  {showProfileMenu && (
+                    <div className="absolute right-0 mt-2 w-56 py-2 bg-white rounded-xl shadow-lg border border-black/5 z-50">
+                      <div className="px-4 py-3 border-b border-black/5">
+                        <p className="text-sm font-semibold text-black">
+                          {user?.displayName || 'User'}
+                        </p>
+                        <p className="text-xs text-black/60 truncate">{user?.email}</p>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        <ArrowRightOnRectangleIcon className="w-4 h-4" />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </nav>

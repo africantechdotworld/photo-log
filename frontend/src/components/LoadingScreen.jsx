@@ -8,23 +8,14 @@ export default function LoadingScreen({ message = 'Loading...', dark = true }) {
   return (
     <div className={`flex justify-center items-center min-h-screen ${bgClass} transition-colors duration-500`}>
       <div className="text-center p-6 flex flex-col items-center">
-        {/* Animated Brand Logo Symbol */}
-        <Logo
-          showText={false}
-          dark={dark}
-          animated={true}
-          size="2xl"
-          className="mb-6 transform hover:scale-105 transition-transform duration-300"
-        />
-        
-        {/* Text Logo below symbol */}
+        {/* Animated Brand Logo */}
         <Logo
           showText={true}
           showTagline={true}
           dark={dark}
-          animated={false}
-          size="xs"
-          className="mb-4 opacity-90"
+          animated={true}
+          size="2xl"
+          className="mb-6 transform hover:scale-105 transition-transform duration-300"
         />
         
         {/* Message */}
