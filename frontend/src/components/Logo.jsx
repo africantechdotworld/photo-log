@@ -6,6 +6,7 @@ export default function Logo({
   dark = false,
   animated = false,
   size = 'md',
+  layout = 'horizontal',
   className = '',
 }) {
   // Sizing styles
@@ -33,7 +34,7 @@ export default function Logo({
   ];
 
   return (
-    <div className={`flex items-center gap-3 select-none ${className}`}>
+    <div className={`flex ${layout === 'vertical' ? 'flex-col items-center' : 'items-center gap-3'} select-none ${className}`}>
       {/* Symbol SVG */}
       <svg
         viewBox="0 0 100 100"

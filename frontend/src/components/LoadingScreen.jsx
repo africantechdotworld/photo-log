@@ -15,6 +15,7 @@ export default function LoadingScreen({ message = 'Loading...', dark = true }) {
           dark={dark}
           animated={true}
           size="2xl"
+          layout="vertical"
           className="mb-6 transform hover:scale-105 transition-transform duration-300"
         />
         
